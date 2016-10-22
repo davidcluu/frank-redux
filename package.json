@@ -1,0 +1,74 @@
+{
+  "name": "frank-redux",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
+    "build": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.prod.js",
+    "build:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.prod.js",
+    "build:server": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.server.js",
+    "build:server:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
+    "clean:dist": "rm -rf dist ; npm run build & npm run build:server",
+    "lint": "eslint webpack.config.server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidcluu/frank-redux.git"
+  },
+  "author": "Lauren Liu, David Luu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davidcluu/frank-redux/issues"
+  },
+  "homepage": "https://github.com/davidcluu/frank-redux#readme",
+
+  "dependencies": {
+    "cross-env": "*",
+    "babel-core": "*",
+
+    "express": "*",
+    "compression": "*",
+    "serve-static": "*",
+    "body-parser": "*",
+
+    "lodash": "*",
+    "jsonwebtoken": "*",
+
+    "react": "*",
+    "react-dom": "*",
+    "react-router": "*",
+    "react-redux": "*",
+    "react-helmet": "*",
+
+    "redux": "*",
+    "redux-thunk": "*"
+  },
+  "devDependencies": {
+    "morgan": "*",
+
+    "webpack": "*",
+    "webpack-externals-plugin": "*",
+    "babel-loader": "*",
+    "babel-plugin-webpack-loaders": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "extract-text-webpack-plugin": "*",
+    "webpack-manifest-plugin": "*",
+    "chunk-manifest-webpack-plugin": "*",
+    "style-loader": "*",
+    "node-sass": "*",
+    "sass-loader": "*",
+    "css-loader": "*",
+    "cssnano": "*",
+    "postcss-cssnext": "*",
+    "postcss-focus": "*",
+    "postcss-loader": "*",
+    "postcss-reporter": "*",
+
+    "eslint": "*",
+    "babel-eslint": "*",
+    "eslint-plugin-react": "*"
+  }
+}
