@@ -6,11 +6,11 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "start:dev": "cross-env NODE_ENV=development nodemon index.js",
-    "build": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.prod.js",
-    "build:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.prod.js",
+    "build:prod": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.prod.js",
+    "build:prod:watch": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.prod.js",
     "build:server": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.server.js",
-    "build:server:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
-    "clean:dist": "rm -rf dist; npm run build; npm run build:server",
+    "build:server:watch": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
+    "clean:dist": "rm -rf dist ; npm run build:prod ; npm run build:server",
     "lint": "eslint client server"
   },
   "repository": {
