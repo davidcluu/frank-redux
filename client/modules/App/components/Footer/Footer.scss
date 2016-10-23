@@ -1,0 +1,11 @@
+@import '../../../../style/variables';
+
+#footer {
+  width: 100%;
+  height: $footer-height;
+
+  position: absolute;
+  bottom: 0;
+
+  background-color: purple;
+}

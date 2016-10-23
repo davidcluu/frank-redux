@@ -14,7 +14,7 @@ export class Footer extends Component {
 
   render () {
     return (
-      <div>
+      <div id={styles.footer}>
         I am the footer
       </div>
     )

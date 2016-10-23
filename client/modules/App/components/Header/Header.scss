@@ -1,0 +1,11 @@
+@import '../../../../style/variables';
+
+#header {
+  width: 100%;
+  height: $header-height;
+
+  position: absolute;
+  top: 0;
+
+  background-color: purple;
+}

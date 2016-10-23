@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 /* Login */
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -47,8 +49,11 @@ export function loginUser(creds) {
         return Promise.reject(user);
       }
       else {
-        localStorage.setItem('id_token', user.id_token);
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('id_token', user.id_token);
+        }
         dispatch(receiveLogin(user));
+        dispatch(push('/'));
       }
     }).catch(err => {})
   }
@@ -68,7 +73,7 @@ function requestLogout() {
   }
 }
 
-function recieveLogout() {
+function receiveLogout() {
   return {
     type: LOGOUT_SUCCESS,
     isFetching: false,
@@ -79,7 +84,10 @@ function recieveLogout() {
 export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
-    localStorage.removeItem('id_token');
-    dispatch(recieveLogout());
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('id_token');
+    }
+    dispatch(receiveLogout());
+    dispatch(push('/login'));
   }
 }

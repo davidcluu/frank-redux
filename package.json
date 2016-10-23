@@ -40,6 +40,7 @@
     "react-dom": "*",
     "react-router": "*",
     "react-redux": "*",
+    "react-router-redux": "*",
     "react-helmet": "*",
 
     "redux": "*",

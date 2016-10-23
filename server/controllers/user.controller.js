@@ -39,7 +39,6 @@ export function login(req, res) {
     });
   }
 
-  console.log(req.body);
   res.status(201).send({
     id_token: createToken(user)
   });

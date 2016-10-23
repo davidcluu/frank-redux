@@ -99,17 +99,17 @@
 
 	var _store = __webpack_require__(12);
 
-	var _fetchData = __webpack_require__(18);
+	var _fetchData = __webpack_require__(19);
 
-	var _config = __webpack_require__(20);
+	var _config = __webpack_require__(21);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _routes = __webpack_require__(21);
+	var _routes = __webpack_require__(22);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _user = __webpack_require__(29);
+	var _user = __webpack_require__(30);
 
 	var _user2 = _interopRequireDefault(_user);
 
@@ -287,7 +287,11 @@
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reducers = __webpack_require__(15);
+	var _reactRouterRedux = __webpack_require__(15);
+
+	var _reactRouter = __webpack_require__(9);
+
+	var _reducers = __webpack_require__(16);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -296,9 +300,7 @@
 	function configureStore() {
 	  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	  var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default)(_redux.createStore);
-
-	  return createStoreWithMiddleware(_reducers2.default);
+	  return (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory)));
 	}
 
 /***/ },
@@ -315,25 +317,9 @@
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(13);
-
-	var _AuthReducer = __webpack_require__(16);
-
-	var _AuthReducer2 = _interopRequireDefault(_AuthReducer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = (0, _redux.combineReducers)({
-	  auth: _AuthReducer2.default
-	});
+	module.exports = require("react-router-redux");
 
 /***/ },
 /* 16 */
@@ -347,7 +333,29 @@
 
 	var _redux = __webpack_require__(13);
 
-	var _AuthActions = __webpack_require__(17);
+	var _AuthReducer = __webpack_require__(17);
+
+	var _AuthReducer2 = _interopRequireDefault(_AuthReducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = (0, _redux.combineReducers)({
+	  auth: _AuthReducer2.default
+	});
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(13);
+
+	var _AuthActions = __webpack_require__(18);
 
 	// TODO: Check if JWT token is expired
 	var initialState = {
@@ -391,16 +399,20 @@
 	exports.default = auth;
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.LOGOUT_SUCCESS = exports.LOGOUT_REQUEST = exports.LOGIN_FAILURE = exports.LOGIN_SUCCESS = exports.LOGIN_REQUEST = undefined;
 	exports.loginUser = loginUser;
 	exports.logoutUser = logoutUser;
+
+	var _reactRouterRedux = __webpack_require__(15);
+
 	/* Login */
 
 	var LOGIN_REQUEST = exports.LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -456,8 +468,11 @@
 	        dispatch(loginError(user.error));
 	        return Promise.reject(user);
 	      } else {
-	        localStorage.setItem('id_token', user.id_token);
+	        if (typeof localStorage !== 'undefined') {
+	          localStorage.setItem('id_token', user.id_token);
+	        }
 	        dispatch(receiveLogin(user));
+	        dispatch((0, _reactRouterRedux.push)('/'));
 	      }
 	    }).catch(function (err) {});
 	  };
@@ -476,7 +491,7 @@
 	  };
 	}
 
-	function recieveLogout() {
+	function receiveLogout() {
 	  return {
 	    type: LOGOUT_SUCCESS,
 	    isFetching: false,
@@ -487,13 +502,16 @@
 	function logoutUser() {
 	  return function (dispatch) {
 	    dispatch(requestLogout());
-	    localStorage.removeItem('id_token');
-	    dispatch(recieveLogout());
+	    if (typeof localStorage !== 'undefined') {
+	      localStorage.removeItem('id_token');
+	    }
+	    dispatch(receiveLogout());
+	    dispatch((0, _reactRouterRedux.push)('/login'));
 	  };
 	}
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -503,7 +521,7 @@
 	});
 	exports.fetchComponentData = fetchComponentData;
 
-	var _promiseUtils = __webpack_require__(19);
+	var _promiseUtils = __webpack_require__(20);
 
 	function fetchComponentData(store, components, params) {
 	  var needs = components.reduce(function (prev, current) {
@@ -516,7 +534,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -542,7 +560,7 @@
 	}
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -558,7 +576,7 @@
 	exports.default = config;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -573,19 +591,19 @@
 
 	var _reactRouter = __webpack_require__(9);
 
-	var _AppContainer = __webpack_require__(22);
+	var _AppContainer = __webpack_require__(23);
 
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	var _App = __webpack_require__(23);
+	var _App = __webpack_require__(24);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(26);
+	var _Index = __webpack_require__(27);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _Login = __webpack_require__(27);
+	var _Login = __webpack_require__(28);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -604,7 +622,7 @@
 	);
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -675,7 +693,7 @@
 	exports.default = AppContainer;
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -692,17 +710,28 @@
 
 	var _reactRedux = __webpack_require__(11);
 
+	var _reactRouterRedux = __webpack_require__(15);
+
 	var _reactHelmet = __webpack_require__(10);
 
 	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
 
-	var _Header = __webpack_require__(24);
+	var _AuthActions = __webpack_require__(18);
+
+	var _Header = __webpack_require__(25);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Footer = __webpack_require__(25);
+	var _Footer = __webpack_require__(26);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
+
+	var _App = {
+	  "app": "_2bj__J7svKUVdeR5Mq__H_",
+	  "container": "_1kWctN4pAdp-p32CbmgOD7"
+	};
+
+	var _App2 = _interopRequireDefault(_App);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -711,8 +740,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import styles from './App.scss';
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -729,16 +756,36 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _props = this.props;
+	      var dispatch = _props.dispatch;
+	      var isAuthenticated = _props.isAuthenticated;
+
+
+	      if (!isAuthenticated) {
+	        dispatch((0, _reactRouterRedux.push)('/login'));
+	      }
+
 	      this.setState({ isMounted: true });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var dispatch = this.props.dispatch;
+
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(_Header2.default, null),
-	        this.props.children,
+	        { id: _App2.default.app },
+	        _react2.default.createElement(_Header2.default, {
+	          onLogoutClick: function onLogoutClick() {
+	            return dispatch((0, _AuthActions.logoutUser)());
+	          }
+	        }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: _App2.default.container },
+	          this.props.children
+	        ),
 	        _react2.default.createElement(_Footer2.default, null)
 	      );
 	    }
@@ -754,21 +801,19 @@
 	};
 
 	function mapStateToProps(state) {
-	  var auth = state.app.auth;
+	  var auth = state.auth;
 	  var isAuthenticated = auth.isAuthenticated;
-	  var errorMessage = auth.errorMessage;
 
 
 	  return {
-	    isAuthenticated: isAuthenticated,
-	    errorMessage: errorMessage
+	    isAuthenticated: isAuthenticated
 	  };
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -784,7 +829,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Header;
+	var _Header = {
+	  "header": "_1gojyfyWXhhfHNYDmYH54L"
+	};
 
 	var _Header2 = _interopRequireDefault(_Header);
 
@@ -816,10 +863,18 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var onLogoutClick = this.props.onLogoutClick;
+
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        'I am the header'
+	        { id: _Header2.default.header },
+	        'I am the header',
+	        _react2.default.createElement(
+	          'div',
+	          { onClick: onLogoutClick },
+	          'Logout'
+	        )
 	      );
 	    }
 	  }]);
@@ -830,7 +885,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -846,7 +901,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Footer;
+	var _Footer = {
+	  "footer": "_3rw87YEmmuMvlVQt192KZu"
+	};
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -880,7 +937,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { id: _Footer2.default.footer },
 	        'I am the footer'
 	      );
 	    }
@@ -892,7 +949,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -963,7 +1020,7 @@
 	exports.default = Index;
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -981,9 +1038,9 @@
 
 	var _reactRedux = __webpack_require__(11);
 
-	var _AuthActions = __webpack_require__(17);
+	var _AuthActions = __webpack_require__(18);
 
-	var _LoginForm = __webpack_require__(28);
+	var _LoginForm = __webpack_require__(29);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -1068,7 +1125,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Login);
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1180,7 +1237,7 @@
 	exports.default = (0, _reactRedux.connect)()(LoginForm);
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1191,7 +1248,7 @@
 
 	var _express = __webpack_require__(3);
 
-	var _user = __webpack_require__(30);
+	var _user = __webpack_require__(31);
 
 	var UserController = _interopRequireWildcard(_user);
 
@@ -1204,7 +1261,7 @@
 	exports.default = router;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1214,11 +1271,11 @@
 	});
 	exports.login = login;
 
-	var _lodash = __webpack_require__(31);
+	var _lodash = __webpack_require__(32);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _jsonwebtoken = __webpack_require__(32);
+	var _jsonwebtoken = __webpack_require__(33);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
@@ -1262,20 +1319,19 @@
 	    });
 	  }
 
-	  console.log(req.body);
 	  res.status(201).send({
 	    id_token: createToken(user)
 	  });
 	}
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = require("jsonwebtoken");

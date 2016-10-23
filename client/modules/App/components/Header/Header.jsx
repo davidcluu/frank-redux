@@ -13,9 +13,12 @@ export class Header extends Component {
   }
 
   render () {
+    const { onLogoutClick } = this.props;
+
     return (
-      <div>
+      <div id={styles.header}>
         I am the header
+        <div onClick={onLogoutClick}>Logout</div>
       </div>
     )
   }
