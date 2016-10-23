@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS } from './AppActions';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS } from './AuthActions';
 
 // TODO: Check if JWT token is expired
 const initialState = {
@@ -37,8 +37,4 @@ const auth = (state = initialState, action) => {
   }
 }
 
-const AppReducer = combineReducers({
-  auth
-});
-
-export default AppReducer;
+export default auth;

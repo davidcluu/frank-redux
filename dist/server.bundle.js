@@ -99,17 +99,17 @@
 
 	var _store = __webpack_require__(12);
 
-	var _fetchData = __webpack_require__(17);
+	var _fetchData = __webpack_require__(18);
 
-	var _config = __webpack_require__(19);
+	var _config = __webpack_require__(20);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _routes = __webpack_require__(20);
+	var _routes = __webpack_require__(21);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _user = __webpack_require__(27);
+	var _user = __webpack_require__(29);
 
 	var _user2 = _interopRequireDefault(_user);
 
@@ -283,21 +283,23 @@
 
 	var _redux = __webpack_require__(13);
 
-	var _reducers = __webpack_require__(14);
+	var _reduxThunk = __webpack_require__(14);
+
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+	var _reducers = __webpack_require__(15);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//const createStoreWithMiddleware = applyMiddleware(thunkMiddleware, api)(createStore);
-
 	function configureStore() {
 	  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	  return (0, _redux.createStore)(_reducers2.default);
+	  var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default)(_redux.createStore);
+
+	  return createStoreWithMiddleware(_reducers2.default);
 	}
-	//import thunkMiddleware from 'redux-thunk';
-	//import api from './middleware/api';
 
 /***/ },
 /* 13 */
@@ -307,25 +309,9 @@
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(13);
-
-	var _AppReducer = __webpack_require__(15);
-
-	var _AppReducer2 = _interopRequireDefault(_AppReducer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = (0, _redux.combineReducers)({
-	  app: _AppReducer2.default
-	});
+	module.exports = require("redux-thunk");
 
 /***/ },
 /* 15 */
@@ -339,7 +325,29 @@
 
 	var _redux = __webpack_require__(13);
 
-	var _AppActions = __webpack_require__(16);
+	var _AuthReducer = __webpack_require__(16);
+
+	var _AuthReducer2 = _interopRequireDefault(_AuthReducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = (0, _redux.combineReducers)({
+	  auth: _AuthReducer2.default
+	});
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(13);
+
+	var _AuthActions = __webpack_require__(17);
 
 	// TODO: Check if JWT token is expired
 	var initialState = {
@@ -352,25 +360,25 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case _AppActions.LOGIN_REQUEST:
+	    case _AuthActions.LOGIN_REQUEST:
 	      return Object.assign({}, state, {
 	        isFetching: true,
 	        isAuthenticated: false,
 	        user: action.creds
 	      });
-	    case _AppActions.LOGIN_SUCCESS:
+	    case _AuthActions.LOGIN_SUCCESS:
 	      return Object.assign({}, state, {
 	        isFetching: false,
 	        isAuthenticated: true,
 	        errorMessage: ''
 	      });
-	    case _AppActions.LOGIN_FAILURE:
+	    case _AuthActions.LOGIN_FAILURE:
 	      return Object.assign({}, state, {
 	        isFetching: false,
 	        isAuthenticated: false,
 	        errorMessage: action.message
 	      });
-	    case _AppActions.LOGOUT_SUCCESS:
+	    case _AuthActions.LOGOUT_SUCCESS:
 	      return Object.assign({}, state, {
 	        isFetching: true,
 	        isAuthenticated: false
@@ -380,14 +388,10 @@
 	  }
 	};
 
-	var AppReducer = (0, _redux.combineReducers)({
-	  auth: auth
-	});
-
-	exports.default = AppReducer;
+	exports.default = auth;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -412,7 +416,7 @@
 	  };
 	}
 
-	function recieveLogin(user) {
+	function receiveLogin(user) {
 	  return {
 	    type: LOGIN_SUCCESS,
 	    isFetching: false,
@@ -449,15 +453,13 @@
 	      var response = _ref.response;
 
 	      if (!response.ok) {
-	        dispatch(loginError(user.message));
+	        dispatch(loginError(user.error));
 	        return Promise.reject(user);
 	      } else {
 	        localStorage.setItem('id_token', user.id_token);
 	        dispatch(receiveLogin(user));
 	      }
-	    }).catch(function (err) {
-	      return console.log("Error: ", err);
-	    });
+	    }).catch(function (err) {});
 	  };
 	}
 
@@ -491,7 +493,7 @@
 	}
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -501,7 +503,7 @@
 	});
 	exports.fetchComponentData = fetchComponentData;
 
-	var _promiseUtils = __webpack_require__(18);
+	var _promiseUtils = __webpack_require__(19);
 
 	function fetchComponentData(store, components, params) {
 	  var needs = components.reduce(function (prev, current) {
@@ -514,7 +516,7 @@
 	}
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -540,7 +542,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -556,7 +558,7 @@
 	exports.default = config;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -571,19 +573,19 @@
 
 	var _reactRouter = __webpack_require__(9);
 
-	var _AppContainer = __webpack_require__(21);
+	var _AppContainer = __webpack_require__(22);
 
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	var _App = __webpack_require__(22);
+	var _App = __webpack_require__(23);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(25);
+	var _Index = __webpack_require__(26);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _Login = __webpack_require__(26);
+	var _Login = __webpack_require__(27);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -602,7 +604,7 @@
 	);
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -673,7 +675,7 @@
 	exports.default = AppContainer;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -694,11 +696,11 @@
 
 	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
 
-	var _Header = __webpack_require__(23);
+	var _Header = __webpack_require__(24);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Footer = __webpack_require__(24);
+	var _Footer = __webpack_require__(25);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -766,7 +768,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -828,7 +830,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -890,7 +892,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -961,7 +963,7 @@
 	exports.default = Index;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -977,6 +979,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(11);
+
+	var _AuthActions = __webpack_require__(17);
+
+	var _LoginForm = __webpack_require__(28);
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	var _Login = {
+	  "login": "_2ajl6W_ZtgfbshCyLYct-3",
+	  "container": "_2m2-zSu0xMmDdXkZY_Njck"
+	};
+
+	var _Login2 = _interopRequireDefault(_Login);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -984,8 +1001,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import styles from './Login.scss';
 
 	var Login = exports.Login = function (_Component) {
 	  _inherits(Login, _Component);
@@ -1007,13 +1022,23 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _props = this.props;
+	      var dispatch = _props.dispatch;
+	      var errorMessage = _props.errorMessage;
+
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { id: _Login2.default.login },
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          'I am the login page'
+	          { className: _Login2.default.container },
+	          _react2.default.createElement(_LoginForm2.default, {
+	            onLoginClick: function onLoginClick(creds) {
+	              return dispatch((0, _AuthActions.loginUser)(creds));
+	            },
+	            errorMessage: errorMessage
+	          })
 	        )
 	      );
 	    }
@@ -1022,10 +1047,140 @@
 	  return Login;
 	}(_react.Component);
 
-	exports.default = Login;
+	Login.propTypes = {
+	  dispatch: _react.PropTypes.func.isRequired,
+	  isAuthenticated: _react.PropTypes.bool.isRequired,
+	  errorMessage: _react.PropTypes.string
+	};
+
+	function mapStateToProps(state) {
+	  var auth = state.auth;
+	  var isAuthenticated = auth.isAuthenticated;
+	  var errorMessage = auth.errorMessage;
+
+
+	  return {
+	    isAuthenticated: isAuthenticated,
+	    errorMessage: errorMessage
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Login);
 
 /***/ },
-/* 27 */
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.LoginForm = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(11);
+
+	var _LoginForm = {
+	  "loginForm": "_1vJIObd7jSxd9a029_Jlxo",
+	  "errorMessage": "_3MT_QoZ8GAxfT4_QtwCy5j",
+	  "active": "_1RPBpUdF9D7eYKvhP9b4kJ"
+	};
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LoginForm = exports.LoginForm = function (_Component) {
+	  _inherits(LoginForm, _Component);
+
+	  function LoginForm(props) {
+	    _classCallCheck(this, LoginForm);
+
+	    var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
+
+	    _this.state = { isMounted: false };
+	    return _this;
+	  }
+
+	  _createClass(LoginForm, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setState({ isMounted: true });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var errorMessage = this.props.errorMessage;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        { id: _LoginForm2.default.loginForm },
+	        _react2.default.createElement('input', {
+	          type: 'text',
+	          ref: 'username',
+	          placeholder: 'USERNAME',
+	          autoComplete: 'off'
+	        }),
+	        _react2.default.createElement('input', {
+	          type: 'password',
+	          ref: 'password',
+	          placeholder: 'PASSWORD',
+	          autoComplete: 'off'
+	        }),
+	        errorMessage && _react2.default.createElement(
+	          'div',
+	          { className: _LoginForm2.default.errorMessage },
+	          errorMessage
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick(event) {
+	              return _this2.handleClick(event);
+	            } },
+	          'LOGIN'
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick(event) {
+	      var username = this.refs.username;
+	      var password = this.refs.password;
+	      var creds = {
+	        username: username.value.trim(),
+	        password: password.value.trim()
+	      };
+	      this.props.onLoginClick(creds);
+	    }
+	  }]);
+
+	  return LoginForm;
+	}(_react.Component);
+
+	LoginForm.propTypes = {
+	  onLoginClick: _react.PropTypes.func.isRequired,
+	  errorMessage: _react.PropTypes.string
+	};
+
+	exports.default = (0, _reactRedux.connect)()(LoginForm);
+
+/***/ },
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1036,7 +1191,7 @@
 
 	var _express = __webpack_require__(3);
 
-	var _user = __webpack_require__(28);
+	var _user = __webpack_require__(30);
 
 	var UserController = _interopRequireWildcard(_user);
 
@@ -1049,7 +1204,7 @@
 	exports.default = router;
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1059,11 +1214,11 @@
 	});
 	exports.login = login;
 
-	var _lodash = __webpack_require__(29);
+	var _lodash = __webpack_require__(31);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _jsonwebtoken = __webpack_require__(30);
+	var _jsonwebtoken = __webpack_require__(32);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
@@ -1087,35 +1242,40 @@
 	}
 
 	function createToken(user) {
-	  _jsonwebtoken2.default.sign(_lodash2.default.omit(user, 'password'), 'testSecret', { expiresIn: 60 * 60 * 5 });
+	  return _jsonwebtoken2.default.sign(_lodash2.default.omit(user, 'password'), 'testSecret', { expiresIn: 60 * 60 * 5 });
 	}
 
 	function login(req, res) {
 	  var userScheme = getUserScheme(req);
 
 	  if (!userScheme.username || !req.body.password) {
-	    return res.status(400).send("The username and Password fields must be nonempty");
+	    return res.status(400).send({
+	      error: "The Username and Password fields must be nonempty"
+	    });
 	  }
 
 	  var user = _lodash2.default.find(users, userScheme.userSearch);
 
 	  if (!user || user.password !== req.body.password) {
-	    return res.status(401).send("The username or password don't match");
+	    return res.status(401).send({
+	      error: "The Username or Password don't match"
+	    });
 	  }
 
+	  console.log(req.body);
 	  res.status(201).send({
 	    id_token: createToken(user)
 	  });
 	}
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = require("jsonwebtoken");

@@ -26,7 +26,7 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        loader: 'style-loader!css-loader?localIdentName=' + cssModulesIdentName + '&modules&importLoaders=1&sourceMap!sass!postcss-loader',
+        loader: 'style-loader!css-loader?localIdentName=' + cssModulesIdentName + '&modules&importLoaders=1&sourceMap!postcss-loader!sass',
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|\.svg$/i,

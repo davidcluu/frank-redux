@@ -13,7 +13,7 @@ function requestLogin(creds) {
   };
 }
 
-function recieveLogin(user) {
+function receiveLogin(user) {
   return {
     type: LOGIN_SUCCESS,
     isFetching: false,
@@ -43,14 +43,14 @@ export function loginUser(creds) {
 
     return fetch('/api/user/login', config).then(response => response.json().then(user => ({ user, response }))).then(({ user, response }) =>  {
       if (!response.ok) {
-        dispatch(loginError(user.message));
+        dispatch(loginError(user.error));
         return Promise.reject(user);
       }
       else {
         localStorage.setItem('id_token', user.id_token);
         dispatch(receiveLogin(user));
       }
-    }).catch(err => console.log("Error: ", err))
+    }).catch(err => {})
   }
 }
 
