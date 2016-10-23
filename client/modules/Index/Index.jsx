@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import { fetchPosts } from './IndexActions';
 
 //import styles from './Index.scss';
 
@@ -8,23 +11,43 @@ export class Index extends Component {
     this.state = { isMounted: false };
   }
 
-  handleClick() {
-    $('.hello').velocity({ 
-      'color': '#ff0000'
-    });
-  }
-
   componentDidMount() {
+    const { dispatch } = this.props;
+
     this.setState({ isMounted: true });
+
+    dispatch(fetchPosts());
   }
 
   render () {
+    var postNodes = this.props.posts.map((post) => {
+      return (
+        <div>
+          {post._id} {post.title} {post.content}
+        </div>
+      );
+    });
+
     return (
       <div>
-        <div className="hello" onClick={this.handleClick}>I am the index</div>
+        {postNodes}
       </div>
     );
   }
 }
 
-export default Index;
+Index.PropTypes = {
+  dispatch: PropTypes.func.isRequired,
+  posts: PropTypes.array.isRequired
+}
+
+function mapStateToProps(state) {
+  const { index } = state;
+  const { posts } = index;
+
+  return {
+    posts
+  }
+}
+
+export default connect(mapStateToProps)(Index);

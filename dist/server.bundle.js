@@ -99,21 +99,21 @@
 
 	var _store = __webpack_require__(12);
 
-	var _config = __webpack_require__(19);
+	var _config = __webpack_require__(22);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _user = __webpack_require__(20);
+	var _user = __webpack_require__(23);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _posts = __webpack_require__(24);
+	var _posts = __webpack_require__(27);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _fetchData = __webpack_require__(26);
+	var _fetchData = __webpack_require__(29);
 
-	var _routes = __webpack_require__(28);
+	var _routes = __webpack_require__(31);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
@@ -294,9 +294,13 @@
 
 	var _reactRouterRedux = __webpack_require__(15);
 
+	var _postsApi = __webpack_require__(16);
+
+	var _postsApi2 = _interopRequireDefault(_postsApi);
+
 	var _reactRouter = __webpack_require__(9);
 
-	var _reducers = __webpack_require__(16);
+	var _reducers = __webpack_require__(17);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
@@ -305,7 +309,7 @@
 	function configureStore() {
 	  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	  return (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory))));
+	  return (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory), _postsApi2.default)));
 	}
 
 /***/ },
@@ -328,7 +332,7 @@
 
 /***/ },
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
@@ -336,17 +340,72 @@
 	  value: true
 	});
 
-	var _redux = __webpack_require__(13);
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	var _AuthReducer = __webpack_require__(17);
+	var BASE_URL = '/api/posts/';
 
-	var _AuthReducer2 = _interopRequireDefault(_AuthReducer);
+	function callAPI(endpoint) {
+	  var token = localStorage.getItem('id_token') || null;
+	  var config = {};
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	  if (token) {
+	    config = {
+	      headers: { 'x-access-token': token }
+	    };
+	  } else {
+	    throw 'Error: No token';
+	  }
 
-	exports.default = (0, _redux.combineReducers)({
-	  auth: _AuthReducer2.default
-	});
+	  return fetch(BASE_URL + endpoint, config).then(function (response) {
+	    return response.text().then(function (text) {
+	      return { text: text, response: response };
+	    });
+	  }).then(function (_ref) {
+	    var text = _ref.text;
+	    var response = _ref.response;
+
+	    if (!response.ok) {
+	      return Promise.reject(text);
+	    }
+
+	    return text;
+	  }).catch(function () {});
+	}
+
+	var CALL_API = exports.CALL_API = Symbol('Call API');
+
+	exports.default = function () {
+	  return function (next) {
+	    return function (action) {
+	      var apiCall = action[CALL_API];
+
+	      if (typeof apiCall === 'undefined') {
+	        return next(action);
+	      }
+
+	      var endpoint = apiCall.endpoint;
+	      var types = apiCall.types;
+
+	      var _types = _slicedToArray(types, 3);
+
+	      var successType = _types[1];
+	      var errorType = _types[2];
+
+
+	      return callAPI(endpoint).then(function (response) {
+	        return next({
+	          response: JSON.parse(response),
+	          type: successType
+	        });
+	      }, function (error) {
+	        return next({
+	          error: error.message || 'Error',
+	          type: errorType
+	        });
+	      });
+	    };
+	  };
+	};
 
 /***/ },
 /* 17 */
@@ -358,7 +417,34 @@
 	  value: true
 	});
 
-	var _AuthActions = __webpack_require__(18);
+	var _redux = __webpack_require__(13);
+
+	var _AuthReducer = __webpack_require__(18);
+
+	var _AuthReducer2 = _interopRequireDefault(_AuthReducer);
+
+	var _IndexReducer = __webpack_require__(20);
+
+	var _IndexReducer2 = _interopRequireDefault(_IndexReducer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = (0, _redux.combineReducers)({
+	  auth: _AuthReducer2.default,
+	  index: _IndexReducer2.default
+	});
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _AuthActions = __webpack_require__(19);
 
 	var isAuthenticated;
 	if (typeof localStorage === 'undefined') {
@@ -414,7 +500,7 @@
 	exports.default = auth;
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -552,7 +638,77 @@
 	}
 
 /***/ },
-/* 19 */
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _IndexActions = __webpack_require__(21);
+
+	var initialState = {
+	  isFetching: false,
+	  posts: []
+	};
+
+	var posts = function posts() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case _IndexActions.POSTS_REQUEST:
+	      return Object.assign({}, state, {
+	        isFetching: true
+	      });
+	    case _IndexActions.POSTS_SUCCESS:
+	      return Object.assign({}, state, {
+	        isFetching: false,
+	        posts: action.response
+	      });
+	    case _IndexActions.POSTS_FAILURE:
+	      return Object.assign({}, state, {
+	        isFetching: false,
+	        error: action.error
+	      });
+	    default:
+	      return state;
+	  }
+	};
+
+	exports.default = posts;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.POSTS_FAILURE = exports.POSTS_SUCCESS = exports.POSTS_REQUEST = undefined;
+	exports.fetchPosts = fetchPosts;
+
+	var _postsApi = __webpack_require__(16);
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var POSTS_REQUEST = exports.POSTS_REQUEST = 'POSTS_REQUEST';
+	var POSTS_SUCCESS = exports.POSTS_SUCCESS = 'POSTS_SUCCESS';
+	var POSTS_FAILURE = exports.POSTS_FAILURE = 'POSTS_FAILURE';
+
+	function fetchPosts() {
+	  return _defineProperty({}, _postsApi.CALL_API, {
+	    endpoint: 'allPosts',
+	    types: [POSTS_REQUEST, POSTS_SUCCESS, POSTS_FAILURE]
+	  });
+	}
+
+/***/ },
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -568,7 +724,7 @@
 	exports.default = config;
 
 /***/ },
-/* 20 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -579,7 +735,7 @@
 
 	var _express = __webpack_require__(3);
 
-	var _user = __webpack_require__(21);
+	var _user = __webpack_require__(24);
 
 	var UserController = _interopRequireWildcard(_user);
 
@@ -592,7 +748,7 @@
 	exports.default = router;
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -602,11 +758,11 @@
 	});
 	exports.login = login;
 
-	var _lodash = __webpack_require__(22);
+	var _lodash = __webpack_require__(25);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _jsonwebtoken = __webpack_require__(23);
+	var _jsonwebtoken = __webpack_require__(26);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
@@ -661,19 +817,19 @@
 	}
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports) {
 
 	module.exports = require("jsonwebtoken");
 
 /***/ },
-/* 24 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -684,7 +840,7 @@
 
 	var _express = __webpack_require__(3);
 
-	var _posts = __webpack_require__(25);
+	var _posts = __webpack_require__(28);
 
 	var PostsController = _interopRequireWildcard(_posts);
 
@@ -694,10 +850,12 @@
 
 	router.use(PostsController.verifyToken);
 
+	router.route('/allPosts').get(PostsController.allPosts);
+
 	exports.default = router;
 
 /***/ },
-/* 25 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -706,25 +864,32 @@
 	  value: true
 	});
 	exports.verifyToken = verifyToken;
+	exports.allPosts = allPosts;
 
-	var _jsonwebtoken = __webpack_require__(23);
+	var _jsonwebtoken = __webpack_require__(26);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function verifyToken(req, res) {
+	var posts = [{
+	  _id: 1,
+	  title: 'testpost',
+	  content: 'testcontent'
+	}];
+
+	function verifyToken(req, res, next) {
 	  var token = req.headers['x-access-token'];
 
 	  if (token) {
-	    _jsonwebtoken2.default.verify(token, 'testSecret', function (err, decoded) {
+	    _jsonwebtoken2.default.verify(token, 'testSecret', function (err, user) {
 	      if (err) {
 	        res.status(401).send({
 	          error: err
 	        });
 	      } else {
-	        decoded.es = 'nope';
-	        res.status(200);
+	        req.user = user;
+	        next();
 	      }
 	    });
 	  } else {
@@ -732,8 +897,12 @@
 	  }
 	}
 
+	function allPosts(req, res) {
+	  res.status(200).send(posts);
+	}
+
 /***/ },
-/* 26 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -743,7 +912,7 @@
 	});
 	exports.fetchComponentData = fetchComponentData;
 
-	var _promiseUtils = __webpack_require__(27);
+	var _promiseUtils = __webpack_require__(30);
 
 	function fetchComponentData(store, components, params) {
 	  var needs = components.reduce(function (prev, current) {
@@ -756,7 +925,7 @@
 	}
 
 /***/ },
-/* 27 */
+/* 30 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -782,7 +951,7 @@
 	}
 
 /***/ },
-/* 28 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -797,19 +966,19 @@
 
 	var _reactRouter = __webpack_require__(9);
 
-	var _AppContainer = __webpack_require__(29);
+	var _AppContainer = __webpack_require__(32);
 
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	var _App = __webpack_require__(30);
+	var _App = __webpack_require__(33);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(33);
+	var _Index = __webpack_require__(36);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _Login = __webpack_require__(34);
+	var _Login = __webpack_require__(37);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -828,7 +997,7 @@
 	);
 
 /***/ },
-/* 29 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -899,7 +1068,7 @@
 	exports.default = AppContainer;
 
 /***/ },
-/* 30 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -922,13 +1091,13 @@
 
 	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
 
-	var _AuthActions = __webpack_require__(18);
+	var _AuthActions = __webpack_require__(19);
 
-	var _Header = __webpack_require__(31);
+	var _Header = __webpack_require__(34);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Footer = __webpack_require__(32);
+	var _Footer = __webpack_require__(35);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -1028,7 +1197,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ },
-/* 31 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1100,7 +1269,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 32 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1164,7 +1333,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 33 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1179,6 +1348,10 @@
 	var _react = __webpack_require__(7);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(11);
+
+	var _IndexActions = __webpack_require__(21);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1203,28 +1376,34 @@
 	  }
 
 	  _createClass(Index, [{
-	    key: 'handleClick',
-	    value: function handleClick() {
-	      $('.hello').velocity({
-	        'color': '#ff0000'
-	      });
-	    }
-	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var dispatch = this.props.dispatch;
+
+
 	      this.setState({ isMounted: true });
+
+	      dispatch((0, _IndexActions.fetchPosts)());
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var postNodes = this.props.posts.map(function (post) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          post._id,
+	          ' ',
+	          post.title,
+	          ' ',
+	          post.content
+	        );
+	      });
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'hello', onClick: this.handleClick },
-	          'I am the index'
-	        )
+	        postNodes
 	      );
 	    }
 	  }]);
@@ -1232,10 +1411,25 @@
 	  return Index;
 	}(_react.Component);
 
-	exports.default = Index;
+	Index.PropTypes = {
+	  dispatch: _react.PropTypes.func.isRequired,
+	  posts: _react.PropTypes.array.isRequired
+	};
+
+	function mapStateToProps(state) {
+	  var index = state.index;
+	  var posts = index.posts;
+
+
+	  return {
+	    posts: posts
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Index);
 
 /***/ },
-/* 34 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1253,9 +1447,9 @@
 
 	var _reactRedux = __webpack_require__(11);
 
-	var _AuthActions = __webpack_require__(18);
+	var _AuthActions = __webpack_require__(19);
 
-	var _LoginForm = __webpack_require__(35);
+	var _LoginForm = __webpack_require__(38);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -1351,7 +1545,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Login);
 
 /***/ },
-/* 35 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

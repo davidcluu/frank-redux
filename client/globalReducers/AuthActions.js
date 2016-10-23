@@ -71,9 +71,9 @@ export function loginUser(creds) {
     dispatch(requestLogin(creds));
 
     return fetch('/api/user/login', config)
-      .then(response => response.json()
-      .then(user => ({user, response})))
-      .then(({user, response}) => {
+      .then(
+        response => response.json().then(user => ({user, response}))
+      ).then(({user, response}) => {
         if (!response.ok) {
           dispatch(loginError(user.error));
         } else {

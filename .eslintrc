@@ -10,7 +10,8 @@
     "classes": true
   },
   "globals": {
-    "Promise": true
+    "Promise": true,
+    "Symbol": true
   },
   "rules": {
     // Possible Errors
