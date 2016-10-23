@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 const users = [{
   _id: 1,
   username: 'test',
-  password: 'test'
+  password: 'test',
 }];
 
 function getUserScheme(req) {
@@ -14,7 +14,7 @@ function getUserScheme(req) {
 
   return {
     username: username,
-    userSearch: userSearch
+    userSearch: userSearch,
   };
 }
 
@@ -27,7 +27,7 @@ export function login(req, res) {
 
   if (!userScheme.username || !req.body.password) {
     return res.status(400).send({
-      error: "The Username and Password fields must be nonempty"
+      error: "The Username and Password fields must be nonempty",
     });
   }
 
@@ -35,11 +35,11 @@ export function login(req, res) {
 
   if (!user || user.password !== req.body.password) {
     return res.status(401).send({
-      error: "The Username or Password don't match"
+      error: "The Username or Password don't match",
     });
   }
 
   res.status(201).send({
-    id_token: createToken(user)
+    id_token: createToken(user),
   });
 }

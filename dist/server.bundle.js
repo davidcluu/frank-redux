@@ -1046,7 +1046,8 @@
 
 	var _Login = {
 	  "login": "_2ajl6W_ZtgfbshCyLYct-3",
-	  "container": "_2m2-zSu0xMmDdXkZY_Njck"
+	  "container": "_2m2-zSu0xMmDdXkZY_Njck",
+	  "signup": "_1GRtSck8DMN4dt5JPHaHoC"
 	};
 
 	var _Login2 = _interopRequireDefault(_Login);
@@ -1096,6 +1097,16 @@
 	            },
 	            errorMessage: errorMessage
 	          })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: _Login2.default.signup },
+	          'First time here? ',
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'javascript:void(0);' },
+	            'Create an Account!'
+	          )
 	        )
 	      );
 	    }

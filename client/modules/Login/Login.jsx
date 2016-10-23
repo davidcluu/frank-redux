@@ -18,7 +18,7 @@ export class Login extends Component {
   }
 
   render () {
-    const { dispatch, errorMessage } = this.props
+    const { dispatch, errorMessage } = this.props;
 
     return (
       <div id={styles.login}>
@@ -28,6 +28,7 @@ export class Login extends Component {
             errorMessage={errorMessage}
           />
         </div>
+        <div className={styles.signup}>First time here? <a href="javascript:void(0);">Create an Account!</a></div>
       </div>
     );
   }

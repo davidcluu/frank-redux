@@ -11,7 +11,7 @@ function requestLogin(creds) {
     type: LOGIN_REQUEST,
     isFetching: true,
     isAuthenticated: false,
-    creds
+    creds,
   };
 }
 
@@ -20,7 +20,7 @@ function receiveLogin(user) {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token
+    id_token: user.id_token,
   };
 }
 
@@ -29,7 +29,7 @@ function loginError(message) {
     type: LOGIN_FAILURE,
     isFetching: false,
     isAuthenticated: false,
-    message
+    message,
   };
 }
 
@@ -37,7 +37,7 @@ export function loginUser(creds) {
   let config = {
     method: 'POST',
     headers: { 'Content-Type':'application/x-www-form-urlencoded' },
-    body: `username=${creds.username}&password=${creds.password}`
+    body: `username=${creds.username}&password=${creds.password}`,
   };
 
   return dispatch => {
@@ -69,7 +69,7 @@ function requestLogout() {
   return {
     type: LOGOUT_REQUEST,
     isFetching: true,
-    isAuthenticated: true
+    isAuthenticated: true,
   }
 }
 
@@ -77,7 +77,7 @@ function receiveLogout() {
   return {
     type: LOGOUT_SUCCESS,
     isFetching: false,
-    isAuthenticated: false
+    isAuthenticated: false,
   }
 }
 

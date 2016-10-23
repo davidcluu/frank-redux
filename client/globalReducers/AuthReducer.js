@@ -4,7 +4,7 @@ import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS } from './A
 // TODO: Check if JWT token is expired
 const initialState = {
   isFetching: false,
-  isAuthenticated: (typeof localStorage === 'undefined') ? false : localStorage.getItem('id_token') ? true : false
+  isAuthenticated: (typeof localStorage === 'undefined') ? false : localStorage.getItem('id_token') ? true : false,
 }
 
 const auth = (state = initialState, action) => {
@@ -13,24 +13,24 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         isFetching: true,
         isAuthenticated: false,
-        user: action.creds
+        user: action.creds,
       })
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: true,
-        errorMessage: ''
+        errorMessage: '',
       })
     case LOGIN_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: false,
-        errorMessage: action.message
+        errorMessage: action.message,
       })
     case LOGOUT_SUCCESS:
       return Object.assign({}, state, {
         isFetching: true,
-        isAuthenticated: false
+        isAuthenticated: false,
       })
     default:
       return state

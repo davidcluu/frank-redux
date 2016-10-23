@@ -11,4 +11,19 @@
   .container {
     @include v-center;
   }
+
+  .signup {
+    margin-bottom: 2em;
+    width: 100%;
+
+    position: absolute;
+    bottom: 0;
+
+    text-align: center;
+    color: #FF9EF8;
+
+    a {
+      color: #FF9EF8;
+    }
+  }
 }

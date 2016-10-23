@@ -11,7 +11,7 @@
     "build:server": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.server.js",
     "build:server:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
     "clean:dist": "rm -rf dist; npm run build; npm run build:server",
-    "lint": "eslint webpack.config.server.js"
+    "lint": "eslint client server"
   },
   "repository": {
     "type": "git",
