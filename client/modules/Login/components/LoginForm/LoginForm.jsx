@@ -30,7 +30,9 @@ export class LoginForm extends Component {
           placeholder="PASSWORD"
           autoComplete="off"
         />
-        { errorMessage && <div className={styles.errorMessage}>{errorMessage}</div> }
+        {errorMessage &&
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        }
         <button onClick={(event) => this.handleClick(event)}>
           LOGIN
         </button>

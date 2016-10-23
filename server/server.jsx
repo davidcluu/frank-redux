@@ -21,12 +21,11 @@ import { Provider } from 'react-redux';
 import { configureStore } from '../client/store';
 
 // Other Modules
-import { fetchComponentData } from './util/fetchData';
-
 import serverConfig from './config';
-
-import routes from '../client/routes';
 import userRoutes from './routes/user.routes';
+import postsRoutes from './routes/posts.routes';
+import { fetchComponentData } from './util/fetchData';
+import routes from '../client/routes';
 
 
 /**
@@ -63,6 +62,7 @@ app.use(serveStatic( path.join(__dirname, '../dist') ));
  */
 
 app.use('/api/user', userRoutes);
+app.use('/api/posts', postsRoutes);
 
 
 /**

@@ -99,19 +99,23 @@
 
 	var _store = __webpack_require__(12);
 
-	var _fetchData = __webpack_require__(19);
-
-	var _config = __webpack_require__(21);
+	var _config = __webpack_require__(19);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _routes = __webpack_require__(22);
-
-	var _routes2 = _interopRequireDefault(_routes);
-
-	var _user = __webpack_require__(30);
+	var _user = __webpack_require__(20);
 
 	var _user2 = _interopRequireDefault(_user);
+
+	var _posts = __webpack_require__(24);
+
+	var _posts2 = _interopRequireDefault(_posts);
+
+	var _fetchData = __webpack_require__(26);
+
+	var _routes = __webpack_require__(28);
+
+	var _routes2 = _interopRequireDefault(_routes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -146,6 +150,7 @@
 	 */
 
 	app.use('/api/user', _user2.default);
+	app.use('/api/posts', _posts2.default);
 
 	/**
 	 * View Pages Route Handlers
@@ -300,7 +305,7 @@
 	function configureStore() {
 	  var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	  return (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory)));
+	  return (0, _redux.createStore)(_reducers2.default, initialState, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory))));
 	}
 
 /***/ },
@@ -353,14 +358,20 @@
 	  value: true
 	});
 
-	var _redux = __webpack_require__(13);
-
 	var _AuthActions = __webpack_require__(18);
 
-	// TODO: Check if JWT token is expired
+	var isAuthenticated;
+	if (typeof localStorage === 'undefined') {
+	  isAuthenticated = false;
+	} else if (localStorage.getItem('id_token')) {
+	  isAuthenticated = true;
+	} else {
+	  isAuthenticated = false;
+	}
+
 	var initialState = {
 	  isFetching: false,
-	  isAuthenticated: typeof localStorage === 'undefined' ? false : localStorage.getItem('id_token') ? true : false
+	  isAuthenticated: isAuthenticated
 	};
 
 	var auth = function auth() {
@@ -368,6 +379,10 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
+	    case _AuthActions.INIT_AUTH:
+	      return Object.assign({}, state, {
+	        isAuthenticated: action.isAuthenticated
+	      });
 	    case _AuthActions.LOGIN_REQUEST:
 	      return Object.assign({}, state, {
 	        isFetching: true,
@@ -407,11 +422,38 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.LOGOUT_SUCCESS = exports.LOGOUT_REQUEST = exports.LOGIN_FAILURE = exports.LOGIN_SUCCESS = exports.LOGIN_REQUEST = undefined;
+	exports.LOGOUT_SUCCESS = exports.LOGOUT_REQUEST = exports.LOGIN_FAILURE = exports.LOGIN_SUCCESS = exports.LOGIN_REQUEST = exports.INIT_AUTH = undefined;
+	exports.initAuth = initAuth;
 	exports.loginUser = loginUser;
 	exports.logoutUser = logoutUser;
 
 	var _reactRouterRedux = __webpack_require__(15);
+
+	/* Init */
+
+	var INIT_AUTH = exports.INIT_AUTH = 'INIT_AUTH';
+
+	function checkToken() {
+	  var isAuthenticated;
+	  if (localStorage.getItem('id_token')) {
+	    isAuthenticated = true;
+	  } else {
+	    isAuthenticated = false;
+	  }
+
+	  return {
+	    type: INIT_AUTH,
+	    isFetching: false,
+	    isAuthenticated: isAuthenticated
+	  };
+	}
+
+	function initAuth() {
+	  return function (dispatch) {
+	    dispatch(checkToken());
+	    return Promise.resolve();
+	  };
+	}
 
 	/* Login */
 
@@ -466,7 +508,6 @@
 
 	      if (!response.ok) {
 	        dispatch(loginError(user.error));
-	        return Promise.reject(user);
 	      } else {
 	        if (typeof localStorage !== 'undefined') {
 	          localStorage.setItem('id_token', user.id_token);
@@ -474,7 +515,7 @@
 	        dispatch(receiveLogin(user));
 	        dispatch((0, _reactRouterRedux.push)('/'));
 	      }
-	    }).catch(function (err) {});
+	    }).catch(function () {});
 	  };
 	}
 
@@ -512,6 +553,187 @@
 
 /***/ },
 /* 19 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var config = {
+	  mongoURL: process.env.MONGO_URL || 'mongodb://localhost:27017/frank-redux',
+	  port: process.env.PORT || 3000
+	};
+
+	exports.default = config;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _express = __webpack_require__(3);
+
+	var _user = __webpack_require__(21);
+
+	var UserController = _interopRequireWildcard(_user);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var router = new _express.Router();
+
+	router.route('/login').post(UserController.login);
+
+	exports.default = router;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.login = login;
+
+	var _lodash = __webpack_require__(22);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _jsonwebtoken = __webpack_require__(23);
+
+	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var users = [{
+	  _id: 1,
+	  username: 'test',
+	  password: 'test'
+	}];
+
+	function getUserScheme(req) {
+	  var username = req.body.username;
+	  var userSearch = { username: username };
+
+	  return {
+	    username: username,
+	    userSearch: userSearch
+	  };
+	}
+
+	function createToken(user) {
+	  return _jsonwebtoken2.default.sign(_lodash2.default.omit(user, 'password'), 'testSecret', {
+	    expiresIn: 60 * 60 * 5
+	  });
+	}
+
+	function login(req, res) {
+	  var userScheme = getUserScheme(req);
+
+	  if (!userScheme.username || !req.body.password) {
+	    res.status(400).send({
+	      error: 'The Username and Password fields must be nonempty'
+	    });
+
+	    return;
+	  }
+
+	  var user = _lodash2.default.find(users, userScheme.userSearch);
+
+	  if (!user || user.password !== req.body.password) {
+	    res.status(401).send({
+	      error: 'The Username or Password do not match'
+	    });
+
+	    return;
+	  }
+
+	  res.status(201).send({
+	    id_token: createToken(user)
+	  });
+	}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = require("jsonwebtoken");
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _express = __webpack_require__(3);
+
+	var _posts = __webpack_require__(25);
+
+	var PostsController = _interopRequireWildcard(_posts);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var router = new _express.Router();
+
+	router.use(PostsController.verifyToken);
+
+	exports.default = router;
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.verifyToken = verifyToken;
+
+	var _jsonwebtoken = __webpack_require__(23);
+
+	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function verifyToken(req, res) {
+	  var token = req.headers['x-access-token'];
+
+	  if (token) {
+	    _jsonwebtoken2.default.verify(token, 'testSecret', function (err, decoded) {
+	      if (err) {
+	        res.status(401).send({
+	          error: err
+	        });
+	      } else {
+	        decoded.es = 'nope';
+	        res.status(200);
+	      }
+	    });
+	  } else {
+	    res.status(400);
+	  }
+	}
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -521,7 +743,7 @@
 	});
 	exports.fetchComponentData = fetchComponentData;
 
-	var _promiseUtils = __webpack_require__(20);
+	var _promiseUtils = __webpack_require__(27);
 
 	function fetchComponentData(store, components, params) {
 	  var needs = components.reduce(function (prev, current) {
@@ -534,7 +756,7 @@
 	}
 
 /***/ },
-/* 20 */
+/* 27 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -560,23 +782,7 @@
 	}
 
 /***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var config = {
-	  mongoURL: process.env.MONGO_URL || 'mongodb://localhost:27017/frank-redux',
-	  port: process.env.PORT || 3000
-	};
-
-	exports.default = config;
-
-/***/ },
-/* 22 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -591,19 +797,19 @@
 
 	var _reactRouter = __webpack_require__(9);
 
-	var _AppContainer = __webpack_require__(23);
+	var _AppContainer = __webpack_require__(29);
 
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	var _App = __webpack_require__(24);
+	var _App = __webpack_require__(30);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(27);
+	var _Index = __webpack_require__(33);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _Login = __webpack_require__(28);
+	var _Login = __webpack_require__(34);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -622,7 +828,7 @@
 	);
 
 /***/ },
-/* 23 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -693,7 +899,7 @@
 	exports.default = AppContainer;
 
 /***/ },
-/* 24 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -718,11 +924,11 @@
 
 	var _AuthActions = __webpack_require__(18);
 
-	var _Header = __webpack_require__(25);
+	var _Header = __webpack_require__(31);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Footer = __webpack_require__(26);
+	var _Footer = __webpack_require__(32);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -756,21 +962,28 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _props = this.props;
-	      var dispatch = _props.dispatch;
-	      var isAuthenticated = _props.isAuthenticated;
+	      var _this2 = this;
+
+	      var dispatch = this.props.dispatch;
 
 
-	      if (!isAuthenticated) {
-	        dispatch((0, _reactRouterRedux.push)('/login'));
-	      }
+	      dispatch((0, _AuthActions.initAuth)()).then(function () {
+	        var isAuthenticated = _this2.props.isAuthenticated;
 
-	      this.setState({ isMounted: true });
+
+	        if (!isAuthenticated) {
+	          dispatch((0, _reactRouterRedux.push)('/login'));
+	        }
+
+	        _this2.setState({ isMounted: true });
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var dispatch = this.props.dispatch;
+	      var _props = this.props;
+	      var dispatch = _props.dispatch;
+	      var isAuthenticated = _props.isAuthenticated;
 
 
 	      return _react2.default.createElement(
@@ -783,7 +996,9 @@
 	        }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: _App2.default.container },
+	          { className: _App2.default.container, onClick: function onClick() {
+	              return console.log(isAuthenticated);
+	            } },
 	          this.props.children
 	        ),
 	        _react2.default.createElement(_Footer2.default, null)
@@ -813,7 +1028,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ },
-/* 25 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -885,7 +1100,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 26 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -949,7 +1164,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 27 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1020,7 +1235,7 @@
 	exports.default = Index;
 
 /***/ },
-/* 28 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1040,7 +1255,7 @@
 
 	var _AuthActions = __webpack_require__(18);
 
-	var _LoginForm = __webpack_require__(29);
+	var _LoginForm = __webpack_require__(35);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -1136,7 +1351,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Login);
 
 /***/ },
-/* 29 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1246,106 +1461,6 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)()(LoginForm);
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _express = __webpack_require__(3);
-
-	var _user = __webpack_require__(31);
-
-	var UserController = _interopRequireWildcard(_user);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var router = new _express.Router();
-
-	router.route('/login').post(UserController.login);
-
-	exports.default = router;
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.login = login;
-
-	var _lodash = __webpack_require__(32);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _jsonwebtoken = __webpack_require__(33);
-
-	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// TODO: Replace with database, add hashing + salting
-	var users = [{
-	  _id: 1,
-	  username: 'test',
-	  password: 'test'
-	}];
-
-	function getUserScheme(req) {
-	  var username = req.body.username;
-	  var userSearch = { username: username };
-
-	  return {
-	    username: username,
-	    userSearch: userSearch
-	  };
-	}
-
-	function createToken(user) {
-	  return _jsonwebtoken2.default.sign(_lodash2.default.omit(user, 'password'), 'testSecret', { expiresIn: 60 * 60 * 5 });
-	}
-
-	function login(req, res) {
-	  var userScheme = getUserScheme(req);
-
-	  if (!userScheme.username || !req.body.password) {
-	    return res.status(400).send({
-	      error: "The Username and Password fields must be nonempty"
-	    });
-	  }
-
-	  var user = _lodash2.default.find(users, userScheme.userSearch);
-
-	  if (!user || user.password !== req.body.password) {
-	    return res.status(401).send({
-	      error: "The Username or Password don't match"
-	    });
-	  }
-
-	  res.status(201).send({
-	    id_token: createToken(user)
-	  });
-	}
-
-/***/ },
-/* 32 */
-/***/ function(module, exports) {
-
-	module.exports = require("lodash");
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	module.exports = require("jsonwebtoken");
 
 /***/ }
 /******/ ]);

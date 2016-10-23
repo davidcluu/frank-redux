@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
 
-import { logoutUser } from '../../globalReducers/AuthActions';
+import { initAuth, logoutUser } from '../../globalReducers/AuthActions';
 
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -17,24 +17,28 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, isAuthenticated } = this.props;
+    const { dispatch } = this.props;
+    
+    dispatch(initAuth()).then(() => {
+      const { isAuthenticated } = this.props;
 
-    if (!isAuthenticated) {
-      dispatch(push('/login'));
-    }
+      if (!isAuthenticated) {
+        dispatch(push('/login'));
+      }
 
-    this.setState({ isMounted: true });  
+      this.setState({ isMounted: true });
+    });
   }
 
   render () {
-    const { dispatch } = this.props;
+    const { dispatch, isAuthenticated } = this.props;
 
     return (
       <div id={styles.app}>
         <Header
           onLogoutClick={ () => dispatch(logoutUser()) }
         />
-        <div className={styles.container}>
+        <div className={styles.container} onClick={()=>console.log(isAuthenticated)}>
           {this.props.children}
         </div>
         <Footer />
