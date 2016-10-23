@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { fetchPosts } from './IndexActions';
 
+import { Post } from '../Post/Post';
+
 //import styles from './Index.scss';
 
 export class Index extends Component {
@@ -22,9 +24,7 @@ export class Index extends Component {
   render () {
     var postNodes = this.props.posts.map((post) => {
       return (
-        <div>
-          {post._id} {post.title} {post.content}
-        </div>
+        <Post post={post} />
       );
     });
 

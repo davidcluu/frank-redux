@@ -38,7 +38,7 @@ class App extends Component {
         <Header
           onLogoutClick={ () => dispatch(logoutUser()) }
         />
-        <div className={styles.container} onClick={()=>console.log(isAuthenticated)}>
+        <div className={styles.container}>
           {this.props.children}
         </div>
         <Footer />
