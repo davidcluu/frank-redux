@@ -1,20 +1,20 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
 
 import styles from './LoginForm.scss';
 
 export class LoginForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMounted: false };
+    this.state = {isMounted: false};
   }
 
   componentDidMount() {
-    this.setState({ isMounted: true });
+    this.setState({isMounted: true});
   }
 
   render() {
-    const { errorMessage } = this.props;
+    const {errorMessage} = this.props;
 
     return (
       <div id={styles.loginForm}>
@@ -33,27 +33,30 @@ export class LoginForm extends Component {
         {errorMessage &&
           <div className={styles.errorMessage}>{errorMessage}</div>
         }
-        <button onClick={(event) => this.handleClick(event)}>
+        <button onClick={() => this.handleClick()}>
           LOGIN
         </button>
       </div>
     );
   }
 
-  handleClick(event) {
+  handleClick() {
+    const {onLoginClick} = this.props;
+
     const username = this.refs.username;
     const password = this.refs.password;
     const creds = {
       username: username.value.trim(),
       password: password.value.trim()
-    }
-    this.props.onLoginClick(creds);
+    };
+
+    onLoginClick(creds);
   }
 }
 
 LoginForm.propTypes = {
   onLoginClick: PropTypes.func.isRequired,
   errorMessage: PropTypes.string
-}
+};
 
 export default connect()(LoginForm);

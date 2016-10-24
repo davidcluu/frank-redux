@@ -1,15 +1,15 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 
 import styles from './Footer.scss';
 
 export class Footer extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMounted: false };
+    this.state = {isMounted: false};
   }
 
   componentDidMount() {
-    this.setState({ isMounted: true });  
+    this.setState({isMounted: true});
   }
 
   render () {
@@ -17,7 +17,7 @@ export class Footer extends Component {
       <div id={styles.footer}>
         I am the footer
       </div>
-    )
+    );
   }
 }
 

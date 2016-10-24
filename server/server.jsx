@@ -2,7 +2,6 @@
  * Dependencies
  */
 
-import http from 'http';
 import path from 'path';
 
 // Express App
@@ -13,18 +12,18 @@ import bodyParser from 'body-parser';
 
 // React/Redux Setup
 import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { match, RouterContext } from 'react-router';
+import {renderToString} from 'react-dom/server';
+import {match, RouterContext} from 'react-router';
 import Helmet from 'react-helmet';
 
-import { Provider } from 'react-redux';
-import { configureStore } from '../client/store';
+import {Provider} from 'react-redux';
+import {configureStore} from '../client/store';
 
 // Other Modules
 import serverConfig from './config';
 import userRoutes from './routes/user.routes';
 import postsRoutes from './routes/posts.routes';
-import { fetchComponentData } from './util/fetchData';
+import {fetchComponentData} from './util/fetchData';
 import routes from '../client/routes';
 
 
@@ -50,11 +49,16 @@ app.set('port', serverConfig.port);
 app.use(compression());
 
 /* Handle POST Requests/URL Encoding */
-app.use(bodyParser.json({ limit: '20mb' }));
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
+app.use(bodyParser.json({
+  limit: '20mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '20mb',
+  extended: false
+}));
 
 /* Serve Static Public Content */
-app.use(serveStatic( path.join(__dirname, '../dist') ));
+app.use(serveStatic(path.join(__dirname, '../dist')));
 
 
 /**
@@ -97,17 +101,15 @@ const renderFullPage = (html, initialState) => {
 </html>
 
   `.trim();
-}
+};
 
 app.use((req, res, next) => {
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
     if (error) {
-      res.status(500).send(error.message);
-    }
-    else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    }
-    else if (renderProps) {
+      return res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
       const store = configureStore();
 
       return fetchComponentData(store, renderProps.components, renderProps.params)
@@ -122,13 +124,12 @@ app.use((req, res, next) => {
           res
             .set('Content-Type', 'text/html')
             .status(200)
-            .end(renderFullPage(initialView, finalState))
+            .end(renderFullPage(initialView, finalState));
         })
-        .catch(error => next(error));
+        .catch(err => next(err));
     }
-    else {
-      res.status(404).send('Not Found');
-    }
+
+    return res.status(404).send('Not Found');
   });
 });
 
@@ -136,6 +137,8 @@ app.use((req, res, next) => {
 /**
  * Create Server and Listen
  */
+
+/* eslint-disable no-console */
 
 app.listen(serverConfig.port, (error) => {
   if (!error) {

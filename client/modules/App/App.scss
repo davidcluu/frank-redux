@@ -2,6 +2,7 @@
 
 #app {
   .container {
-    padding-top: $header-height
+    padding-top: $header-height;
+    padding-bottom: $footer-height;
   }
 }

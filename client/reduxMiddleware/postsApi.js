@@ -28,7 +28,7 @@ function callAPI(endpoint, method) {
 function requestAPI(requestType) {
   return {
     type: requestType
-  }
+  };
 }
 
 export const CALL_API = Symbol('Call API');
@@ -40,8 +40,8 @@ export default store => next => action => {
     return next(action);
   }
 
-  let { dispatch } = store;
-  let { endpoint, method, types } = request;
+  let {dispatch} = store;
+  let {endpoint, method, types} = request;
   const [requestType, successType, errorType] = types;
 
   dispatch(requestAPI(requestType));

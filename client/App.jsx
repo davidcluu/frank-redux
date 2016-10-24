@@ -1,18 +1,18 @@
-import React, { Component, PropTypes } from 'react';
-import { Provider } from 'react-redux';
-import { Router, browserHistory } from 'react-router';
+import React, {Component} from 'react';
+import {Provider} from 'react-redux';
+import {Router, browserHistory} from 'react-router';
 import routes from './routes';
 
-import styles from './App.scss';
+require('./App.scss');
 
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMounted: false };
+    this.state = {isMounted: false};
   }
 
   componentDidMount() {
-    this.setState({ isMounted: true });  
+    this.setState({isMounted: true});
   }
 
   render () {
@@ -22,12 +22,12 @@ export class App extends Component {
           {routes}
         </Router>
       </Provider>
-    )
+    );
   }
 }
 
 App.propTypes = {
   store: React.PropTypes.object.isRequired
-}
+};
 
 export default App;

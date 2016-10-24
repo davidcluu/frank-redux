@@ -1,11 +1,11 @@
 @import '../../../../globalStyles/variables';
 
 #header {
+  border-bottom: 1px solid #eee;
   width: 100%;
   height: $header-height;
 
-  position: absolute;
+  position: fixed;
   top: 0;
-
-  background-color: purple;
+  background-color: #fff;
 }
