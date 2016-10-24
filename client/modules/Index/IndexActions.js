@@ -8,6 +8,7 @@ export function fetchPosts() {
   return {
     [CALL_API]: {
       endpoint: 'allPosts',
+      method: 'GET',
       types: [POSTS_REQUEST, POSTS_SUCCESS, POSTS_FAILURE]
     }
   };

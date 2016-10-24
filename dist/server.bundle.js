@@ -344,12 +344,13 @@
 
 	var BASE_URL = '/api/posts/';
 
-	function callAPI(endpoint) {
+	function callAPI(endpoint, method) {
 	  var token = localStorage.getItem('id_token') || null;
 	  var config = {};
 
 	  if (token) {
 	    config = {
+	      method: method,
 	      headers: { 'x-access-token': token }
 	    };
 	  } else {
@@ -372,27 +373,38 @@
 	  }).catch(function () {});
 	}
 
+	function requestAPI(requestType) {
+	  return {
+	    type: requestType
+	  };
+	}
+
 	var CALL_API = exports.CALL_API = Symbol('Call API');
 
-	exports.default = function () {
+	exports.default = function (store) {
 	  return function (next) {
 	    return function (action) {
-	      var apiCall = action[CALL_API];
+	      var request = action[CALL_API];
 
-	      if (typeof apiCall === 'undefined') {
+	      if (typeof request === 'undefined') {
 	        return next(action);
 	      }
 
-	      var endpoint = apiCall.endpoint;
-	      var types = apiCall.types;
+	      var dispatch = store.dispatch;
+	      var endpoint = request.endpoint;
+	      var method = request.method;
+	      var types = request.types;
 
 	      var _types = _slicedToArray(types, 3);
 
+	      var requestType = _types[0];
 	      var successType = _types[1];
 	      var errorType = _types[2];
 
 
-	      return callAPI(endpoint).then(function (response) {
+	      dispatch(requestAPI(requestType));
+
+	      return callAPI(endpoint, method).then(function (response) {
 	        return next({
 	          response: JSON.parse(response),
 	          type: successType
@@ -703,6 +715,7 @@
 	function fetchPosts() {
 	  return _defineProperty({}, _postsApi.CALL_API, {
 	    endpoint: 'allPosts',
+	    method: 'GET',
 	    types: [POSTS_REQUEST, POSTS_SUCCESS, POSTS_FAILURE]
 	  });
 	}
@@ -1388,13 +1401,23 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var postNodes = this.props.posts.map(function (post) {
+	      var _props = this.props;
+	      var isFetching = _props.isFetching;
+	      var posts = _props.posts;
+
+
+	      var postNodes = posts.map(function (post) {
 	        return _react2.default.createElement(_Post.Post, { post: post });
 	      });
 
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        isFetching && _react2.default.createElement(
+	          'div',
+	          null,
+	          'Fetching'
+	        ),
 	        postNodes
 	      );
 	    }
@@ -1405,15 +1428,18 @@
 
 	Index.PropTypes = {
 	  dispatch: _react.PropTypes.func.isRequired,
+	  isFetching: _react.PropTypes.bool.isRequired,
 	  posts: _react.PropTypes.array.isRequired
 	};
 
 	function mapStateToProps(state) {
 	  var index = state.index;
+	  var isFetching = index.isFetching;
 	  var posts = index.posts;
 
 
 	  return {
+	    isFetching: isFetching,
 	    posts: posts
 	  };
 	}

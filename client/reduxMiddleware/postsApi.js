@@ -1,11 +1,12 @@
 const BASE_URL = '/api/posts/';
 
-function callAPI(endpoint) {
+function callAPI(endpoint, method) {
   let token = localStorage.getItem('id_token') || null;
   let config = {};
 
   if (token) {
     config = {
+      method: method,
       headers: {'x-access-token': token}
     };
   } else {
@@ -24,19 +25,28 @@ function callAPI(endpoint) {
     }).catch(() => {});
 }
 
+function requestAPI(requestType) {
+  return {
+    type: requestType
+  }
+}
+
 export const CALL_API = Symbol('Call API');
 
-export default () => next => action => {
-  const apiCall = action[CALL_API];
+export default store => next => action => {
+  const request = action[CALL_API];
 
-  if (typeof apiCall === 'undefined') {
+  if (typeof request === 'undefined') {
     return next(action);
   }
 
-  let {endpoint, types} = apiCall;
-  const [, successType, errorType] = types;
+  let { dispatch } = store;
+  let { endpoint, method, types } = request;
+  const [requestType, successType, errorType] = types;
 
-  return callAPI(endpoint).then(
+  dispatch(requestAPI(requestType));
+
+  return callAPI(endpoint, method).then(
     response =>
       next({
         response: JSON.parse(response),

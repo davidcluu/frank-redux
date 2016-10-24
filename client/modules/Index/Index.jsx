@@ -22,7 +22,9 @@ export class Index extends Component {
   }
 
   render () {
-    var postNodes = this.props.posts.map((post) => {
+    const { isFetching, posts } = this.props;
+
+    var postNodes = posts.map((post) => {
       return (
         <Post post={post} />
       );
@@ -30,6 +32,9 @@ export class Index extends Component {
 
     return (
       <div>
+        {isFetching &&
+          <div>Fetching</div>
+        }
         {postNodes}
       </div>
     );
@@ -38,14 +43,16 @@ export class Index extends Component {
 
 Index.PropTypes = {
   dispatch: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   posts: PropTypes.array.isRequired
 }
 
 function mapStateToProps(state) {
   const { index } = state;
-  const { posts } = index;
+  const { isFetching, posts } = index;
 
   return {
+    isFetching,
     posts
   }
 }
