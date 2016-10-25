@@ -52,7 +52,7 @@ app.set('port', serverConfig.port);
 
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config);
-  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
 }
 
 /* Gzip Compression */
@@ -99,11 +99,10 @@ const renderFullPage = (html, initialState) => {
     chunk =
       `//<![CDATA[
       window.webpackManifest = ${JSON.stringify(chunkManifest)};
-      //]]>`
+      //]]>`;
     vendorjs = assetsManifest['/vendor.js'];
     appjs = assetsManifest['/app.js'];
-  }
-  else {
+  } else {
     css = '';
     chunk = '';
     vendorjs = '/vendor.js';
