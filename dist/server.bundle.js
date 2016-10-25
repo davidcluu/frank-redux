@@ -1537,18 +1537,24 @@
 	      });
 	    }
 	  }, {
-	    key: 'upvote',
-	    value: function upvote() {
+	    key: 'onUpvoteClick',
+	    value: function onUpvoteClick() {
+	      var upvoted = this.state.upvoted;
+
+
 	      this.setState({
-	        upvoted: true,
+	        upvoted: !upvoted,
 	        downvoted: false
 	      });
 	    }
 	  }, {
-	    key: 'downvote',
-	    value: function downvote() {
+	    key: 'onDownvoteClick',
+	    value: function onDownvoteClick() {
+	      var downvoted = this.state.downvoted;
+
+
 	      this.setState({
-	        downvoted: true,
+	        downvoted: !downvoted,
 	        upvoted: false
 	      });
 	    }
@@ -1576,6 +1582,15 @@
 	        shortenedDescription = description.substring(0, 100) + '...';
 	      } else {
 	        shortenedDescription = description;
+	      }
+
+	      var adjustedScore;
+	      if (upvoted) {
+	        adjustedScore = score + 1;
+	      } else if (downvoted) {
+	        adjustedScore = score - 1;
+	      } else {
+	        adjustedScore = score;
 	      }
 
 	      var tagList = tags.map(function (tag) {
@@ -1625,7 +1640,7 @@
 	                  {
 	                    className: _Post2.default.upvote + ' ' + (upvoted && _Post2.default.selected),
 	                    onClick: function onClick() {
-	                      return _this2.upvote();
+	                      return _this2.onUpvoteClick();
 	                    }
 	                  },
 	                  '\u2227'
@@ -1633,14 +1648,14 @@
 	                _react2.default.createElement(
 	                  'div',
 	                  null,
-	                  score
+	                  adjustedScore
 	                ),
 	                _react2.default.createElement(
 	                  'div',
 	                  {
 	                    className: _Post2.default.downvote + ' ' + (downvoted && _Post2.default.selected),
 	                    onClick: function onClick() {
-	                      return _this2.downvote();
+	                      return _this2.onDownvoteClick();
 	                    }
 	                  },
 	                  '\u2228'

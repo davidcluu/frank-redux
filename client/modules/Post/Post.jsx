@@ -21,16 +21,20 @@ export class Post extends Component {
     });
   }
 
-  upvote() {
+  onUpvoteClick() {
+    const {upvoted} = this.state;
+
     this.setState({
-      upvoted: true,
+      upvoted: !upvoted,
       downvoted: false
     });
   }
 
-  downvote() {
+  onDownvoteClick() {
+    const {downvoted} = this.state;
+
     this.setState({
-      downvoted: true,
+      downvoted: !downvoted,
       upvoted: false
     });
   }
@@ -45,6 +49,15 @@ export class Post extends Component {
       shortenedDescription = description.substring(0, 100) + '...';
     } else {
       shortenedDescription = description;
+    }
+
+    var adjustedScore;
+    if (upvoted) {
+      adjustedScore = score + 1;
+    } else if (downvoted) {
+      adjustedScore = score - 1;
+    } else {
+      adjustedScore = score;
     }
 
     var tagList = tags.map((tag) => {
@@ -72,12 +85,12 @@ export class Post extends Component {
               <div className={styles.right}>
                 <div
                   className={styles.upvote + ' ' + (upvoted && styles.selected)}
-                  onClick={() => this.upvote()}
+                  onClick={() => this.onUpvoteClick()}
                 >&and;</div>
-                <div>{score}</div>
+                <div>{adjustedScore}</div>
                 <div
                   className={styles.downvote + ' ' + (downvoted && styles.selected)}
-                  onClick={() => this.downvote()}
+                  onClick={() => this.onDownvoteClick()}
                 >&or;</div>
               </div>
             </div>

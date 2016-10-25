@@ -3,6 +3,7 @@ import {Provider} from 'react-redux';
 import {Router, browserHistory} from 'react-router';
 import routes from './routes';
 
+require('./vendor/normalize.css');
 require('./App.scss');
 
 export class App extends Component {
