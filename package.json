@@ -4,14 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "//Dev Scripts//": "",
+    "start:dev": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 nodemon index.js",
+    "lint": "eslint --ext .js --ext .jsx client server",
+
+    "//Prod Scripts//": "",
     "start": "cross-env NODE_ENV=production node index.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon index.js",
     "build:prod": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.prod.js",
-    "build:prod:watch": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.prod.js",
+    "build:prod:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.prod.js",
     "build:server": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.server.js",
-    "build:server:watch": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
-    "clean:dist": "rm -rf dist ; npm run build:prod ; npm run build:server",
-    "lint": "eslint --ext .js --ext .jsx client server"
+    "build:server:watch": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --watch --config webpack.config.server.js",
+    
+    "build:prod:all": "rm -rf dist ; npm run build:prod ; npm run build:server",
+    "clean:prod": "rm -rf dist"
   },
   "repository": {
     "type": "git",
@@ -50,6 +55,8 @@
     "morgan": "*",
 
     "webpack": "*",
+    "webpack-dev-server": "*",
+    "webpack-dev-middleware": "*",
     "webpack-externals-plugin": "*",
     "babel-loader": "*",
     "babel-plugin-webpack-loaders": "*",
@@ -67,6 +74,9 @@
     "postcss-focus": "*",
     "postcss-loader": "*",
     "postcss-reporter": "*",
+
+    "babel-register": "*",
+    "babel-polyfill": "*",
 
     "eslint": "*",
     "babel-eslint": "*",

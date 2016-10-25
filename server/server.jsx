@@ -19,6 +19,11 @@ import Helmet from 'react-helmet';
 import {Provider} from 'react-redux';
 import {configureStore} from '../client/store';
 
+// Webpack
+import webpack from 'webpack';
+import config from '../webpack.config.dev';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+
 // Other Modules
 import serverConfig from './config';
 import userRoutes from './routes/user.routes';
@@ -44,6 +49,11 @@ app.set('port', serverConfig.port);
 /**
  * Middleware
  */
+
+if (process.env.NODE_ENV === 'development') {
+  const compiler = webpack(config);
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+}
 
 /* Gzip Compression */
 app.use(compression());
@@ -76,8 +86,29 @@ app.use('/api/posts', postsRoutes);
 const renderFullPage = (html, initialState) => {
   const head = Helmet.rewind();
 
-  const assetsManifest = JSON.parse(process.env.webpackAssets);
-  const chunkManifest = JSON.parse(process.env.webpackChunkAssets);
+  var css;
+  var chunk;
+  var vendorjs;
+  var appjs;
+
+  if (process.env.NODE_ENV === 'production') {
+    const assetsManifest = JSON.parse(process.env.webpackAssets);
+    const chunkManifest = JSON.parse(process.env.webpackChunkAssets);
+
+    css = `<link rel="stylesheet" href="${assetsManifest['/app.css']}" />`;
+    chunk =
+      `//<![CDATA[
+      window.webpackManifest = ${JSON.stringify(chunkManifest)};
+      //]]>`
+    vendorjs = assetsManifest['/vendor.js'];
+    appjs = assetsManifest['/app.js'];
+  }
+  else {
+    css = '';
+    chunk = '';
+    vendorjs = '/vendor.js';
+    appjs = '/app.js';
+  }
 
   return `
 
@@ -87,16 +118,16 @@ const renderFullPage = (html, initialState) => {
     ${head.title.toString()}
     ${head.meta.toString()}
     ${head.link.toString()}
-    <link rel="stylesheet" href="${assetsManifest['/app.css']}" />
+    ${css}
   </head>
   <body>
     <div id="root">${html}</div>
     <script>
       window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
-      window.webpackManifest = ${JSON.stringify(chunkManifest)};
+      ${chunk}
     </script>
-    <script src="${assetsManifest['/vendor.js']}"></script>
-    <script src="${assetsManifest['/app.js']}"></script>
+    <script src="${vendorjs}"></script>
+    <script src="${appjs}"></script>
   </body>
 </html>
 

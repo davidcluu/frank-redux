@@ -23,9 +23,9 @@ module.exports = {
   },
 
   output: {
-    path: __dirname + '/dist/',
-    filename: '[name].[chunkhash].js',
-    publicPath: '/',
+    path: __dirname,
+    filename: 'app.js',
+    publicPath: 'http://0.0.0.0:8000/'
   },
 
   resolve: {
@@ -45,11 +45,11 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader'),
+        loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader',
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader!sass'),
+        loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader!sass',
       },
       {
         test: /\.css$/,
