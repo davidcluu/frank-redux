@@ -54,7 +54,7 @@
     "redux-thunk": "*"
   },
   "devDependencies": {
-    "morgan": "*",
+    "nodemon": "*",
 
     "webpack": "*",
     "webpack-dev-server": "*",
