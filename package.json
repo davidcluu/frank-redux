@@ -86,5 +86,10 @@
     "eslint": "*",
     "babel-eslint": "*",
     "eslint-plugin-react": "*"
+  },
+
+  "engines": {
+    "node": "6.7.0",
+    "npm": "3.10.*"
   }
 }
