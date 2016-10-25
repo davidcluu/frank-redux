@@ -7,40 +7,46 @@ var cssModulesIdentName = '[hash:base64]';
 module.exports = {
   output: {
     publicPath: '/',
-    libraryTarget: 'commonjs2',
+    libraryTarget: 'commonjs2'
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       'client',
-      'node_modules',
-    ],
+      'node_modules'
+    ]
   },
   module: {
     loaders: [
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        loader: 'style-loader!css-loader?localIdentName=' + cssModulesIdentName + '&modules&importLoaders=1&sourceMap!postcss-loader',
+        loader:
+          'style-loader!css-loader?localIdentName=' +
+          cssModulesIdentName +
+          '&modules&importLoaders=1&sourceMap!postcss-loader'
       },
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        loader: 'style-loader!css-loader?localIdentName=' + cssModulesIdentName + '&modules&importLoaders=1&sourceMap!postcss-loader!sass',
+        loader:
+          'style-loader!css-loader?localIdentName=' +
+          cssModulesIdentName +
+          '&modules&importLoaders=1&sourceMap!postcss-loader!sass'
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|\.svg$/i,
-        loader: 'url-loader?limit=10000',
-      },
-    ],
+        loader: 'url-loader?limit=10000'
+      }
+    ]
   },
   postcss: () => [
     postcssFocus(),
     cssnext({
-      browsers: ['last 2 versions', 'IE > 10'],
+      browsers: ['last 2 versions', 'IE > 10']
     }),
     postcssReporter({
-      clearMessages: true,
-    }),
-  ],
+      clearMessages: true
+    })
+  ]
 };

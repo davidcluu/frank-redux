@@ -3,20 +3,20 @@ if (process.env.NODE_ENV === 'production') {
   process.env.webpackChunkAssets = JSON.stringify(require('./dist/chunk-manifest.json'));
 
   require('./dist/server.bundle.js');
-}
-else if (process.env.NODE_ENV === 'development') {
+} else if (process.env.NODE_ENV === 'development') {
   require('babel-register')({
-    "plugins": [
+    plugins: [
       [
-        "babel-plugin-webpack-loaders",
+        'babel-plugin-webpack-loaders',
         {
-          "config": "./webpack.config.babel.js",
-          "verbose": false
+          config: './webpack.config.babel.js',
+          verbose: false
         }
       ]
     ]
   });
+
   require('babel-polyfill');
-  
+
   require('./server/server');
 }

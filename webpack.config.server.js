@@ -1,4 +1,3 @@
-var fs = require('fs');
 var path = require('path');
 var ExternalsPlugin = require('webpack-externals-plugin');
 
@@ -8,22 +7,22 @@ module.exports = {
 
   output: {
     path: __dirname + '/dist/',
-    filename: 'server.bundle.js',
+    filename: 'server.bundle.js'
   },
 
   target: 'node',
 
   node: {
     __filename: true,
-    __dirname: true,
+    __dirname: true
   },
 
   resolve: {
     extensions: ['', '.js', '.jsx'],
     modules: [
       'client',
-      'node_modules',
-    ],
+      'node_modules'
+    ]
   },
 
   module: {
@@ -36,27 +35,28 @@ module.exports = {
           presets: [
             'react',
             'es2015',
-            'stage-0',
+            'stage-0'
           ],
           plugins: [
             [
               'babel-plugin-webpack-loaders', {
-                'config': './webpack.config.babel.js',
-                "verbose": false,
-              },
-            ],
-          ],
-        },
-      }, {
-        test: /\.json$/,
-        loader: 'json-loader',
+                config: './webpack.config.babel.js',
+                verbose: false
+              }
+            ]
+          ]
+        }
       },
-    ],
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      }
+    ]
   },
   plugins: [
     new ExternalsPlugin({
       type: 'commonjs',
-      include: path.join(__dirname, './node_modules/'),
-    }),
-  ],
+      include: path.join(__dirname, './node_modules/')
+    })
+  ]
 };
