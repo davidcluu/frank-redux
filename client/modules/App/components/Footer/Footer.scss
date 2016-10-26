@@ -5,7 +5,22 @@
   width: 100%;
   height: $footer-height;
 
+  display: table;
+
   position: fixed;
   bottom: 0;
   background-color: #fff;
+
+  .button {
+    display: table-cell;
+
+    vertical-align: middle;
+    text-align: center;
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+      font-weight: inherit;
+    }
+  }
 }

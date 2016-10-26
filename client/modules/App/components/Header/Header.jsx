@@ -17,8 +17,16 @@ export class Header extends Component {
 
     return (
       <div id={styles.header}>
-        I am the header
-        <div onClick={onLogoutClick}>Logout</div>
+        <div className={styles.logo}>
+          <div className={styles.image}>
+            Frank
+          </div>
+        </div>
+        <div className={styles.logout}>
+          <div className={styles.button} onClick={onLogoutClick}>
+            Logout
+          </div>
+        </div>
       </div>
     );
   }

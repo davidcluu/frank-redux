@@ -5,7 +5,35 @@
   width: 100%;
   height: $header-height;
 
+  display: table;
+
   position: fixed;
   top: 0;
   background-color: #fff;
+
+  & > div {
+    display: table-cell;
+
+    vertical-align: middle;
+  }
+
+  .logo {
+    padding-left: 5%;
+
+    text-align: left;
+
+    .image {
+      display: inline-block;
+    }
+  }
+
+  .logout {
+    padding-right: 5%;
+
+    text-align: right;
+
+    .button {
+      display: inline-block;
+    }
+  }
 }

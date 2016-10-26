@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 
 import styles from './Footer.scss';
 
@@ -15,7 +16,18 @@ export class Footer extends Component {
   render () {
     return (
       <div id={styles.footer}>
-        I am the footer
+        <div className={styles.button}>
+          <Link to={'/?' + 'A'}>A</Link>
+        </div>
+        <div className={styles.button}>
+          <Link to={'/?' + 'B'}>B</Link>
+        </div>
+        <div className={styles.button}>
+          <Link to={'/?' + 'C'}>C</Link>
+        </div>
+        <div className={styles.button}>
+          <Link to={'/?' + 'D'}>D</Link>
+        </div>
       </div>
     );
   }
