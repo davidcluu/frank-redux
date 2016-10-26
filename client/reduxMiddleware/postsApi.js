@@ -10,7 +10,7 @@ function callAPI(endpoint, method) {
       headers: {'x-access-token': token}
     };
   } else {
-    throw 'Error: No token';
+    return Promise.reject('No token');
   }
 
   return fetch(BASE_URL + endpoint, config)

@@ -24,9 +24,9 @@ class App extends Component {
       if (!isAuthenticated) {
         dispatch(push('/login'));
       }
-
-      this.setState({isMounted: true});
     });
+
+    this.setState({isMounted: true});
   }
 
   render () {
