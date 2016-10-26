@@ -1,5 +1,8 @@
 @import '../../../../globalStyles/variables';
 
+$selected-nav: #83009e;
+$unselected-nav: #727272;
+
 #footer {
   border-top: 1px solid #eee;
   width: 100%;
@@ -13,7 +16,7 @@
 
   .button {
     height: 50%;
-    
+
     display: table-cell;
 
     vertical-align: middle;
@@ -23,6 +26,46 @@
       color: inherit;
       text-decoration: inherit;
       font-weight: inherit;
+    }
+  }
+
+  .home {
+    svg path {
+      fill: $unselected-nav;
+    }
+
+    &.selected svg path {
+      fill: $selected-nav;
+    }
+  }
+
+  .submit {
+    svg path {
+      stroke: $unselected-nav;
+    }
+  }
+
+  .search {
+    svg path {
+      stroke: $unselected-nav;
+      fill: $unselected-nav;
+    }
+  }
+
+  .history {
+    svg g {
+      .a {
+        stroke: $unselected-nav;
+      }
+
+      .b {
+        stroke: $unselected-nav;
+        fill: $unselected-nav;
+      }
+
+      .c {
+        stroke: $unselected-nav;
+      }
     }
   }
 }

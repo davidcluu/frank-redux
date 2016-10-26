@@ -30,7 +30,8 @@ class App extends Component {
   }
 
   render () {
-    const {dispatch} = this.props;
+    const {dispatch, children, location} = this.props;
+    const {pathname} = location;
 
     return (
       <div id={styles.app}>
@@ -38,9 +39,11 @@ class App extends Component {
           onLogoutClick={() => dispatch(logoutUser())}
         />
         <div className={styles.container}>
-          {this.props.children}
+          {children}
         </div>
-        <Footer />
+        <Footer
+          pathname={pathname}
+        />
       </div>
     );
   }
@@ -49,7 +52,8 @@ class App extends Component {
 App.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
   isAuthenticated: React.PropTypes.bool.isRequired,
-  children: React.PropTypes.object.isRequired
+  children: React.PropTypes.object.isRequired,
+  location: React.PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

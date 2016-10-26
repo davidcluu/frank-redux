@@ -40,7 +40,8 @@ export class Post extends Component {
   }
 
   render () {
-    const {_id, user, comments, tags, image, description, score} = this.props.post;
+    const {post} = this.props;
+    const {_id, user, comments, tags, image, description, score} = post;
     const {username} = user;
     const {upvoted, downvoted} = this.state;
 
@@ -84,12 +85,12 @@ export class Post extends Component {
               </div>
               <div className={styles.right}>
                 <div
-                  className={styles.upvote + ' ' + (upvoted && styles.selected)}
+                  className={`${styles.upvote} ${(upvoted && styles.selected)}`}
                   onClick={() => this.onUpvoteClick()}
                 >&and;</div>
                 <div>{adjustedScore}</div>
                 <div
-                  className={styles.downvote + ' ' + (downvoted && styles.selected)}
+                  className={`${styles.downvote} ${(downvoted && styles.selected)}`}
                   onClick={() => this.onDownvoteClick()}
                 >&or;</div>
               </div>
