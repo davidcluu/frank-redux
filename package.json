@@ -51,28 +51,7 @@
     "react-helmet": "*",
 
     "redux": "*",
-    "redux-thunk": "*",
-
-    "webpack": "*",
-    "webpack-dev-server": "*",
-    "webpack-dev-middleware": "*",
-    "webpack-externals-plugin": "*",
-    "babel-loader": "*",
-    "babel-plugin-webpack-loaders": "*",
-    "babel-preset-es2015": "*",
-    "babel-preset-react": "*",
-    "extract-text-webpack-plugin": "*",
-    "webpack-manifest-plugin": "*",
-    "chunk-manifest-webpack-plugin": "*",
-    "style-loader": "*",
-    "node-sass": "*",
-    "sass-loader": "*",
-    "css-loader": "*",
-    "cssnano": "*",
-    "postcss-cssnext": "*",
-    "postcss-focus": "*",
-    "postcss-loader": "*",
-    "postcss-reporter": "*"
+    "redux-thunk": "*"
   },
   "devDependencies": {
     "nodemon": "*",

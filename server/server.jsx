@@ -19,9 +19,6 @@ import Helmet from 'react-helmet';
 import {Provider} from 'react-redux';
 import {configureStore} from '../client/store';
 
-// Webpack
-import config from '../webpack.config.dev';
-
 // Other Modules
 import serverConfig from './config';
 import userRoutes from './routes/user.routes';
@@ -50,6 +47,7 @@ app.set('port', serverConfig.port);
 
 if (process.env.NODE_ENV === 'development') {
   var webpack = require('webpack');
+  var config = require('../webpack.config.dev');
   var webpackDevMiddleware = require('webpack-dev-middleware');
   
   const compiler = webpack(config);

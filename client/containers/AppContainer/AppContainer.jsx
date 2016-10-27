@@ -16,8 +16,8 @@ class AppContainer extends Component {
     return (
       <div>
         <Helmet
-          defaultTitle="Test"
-          titleTemplate="%s - Test"
+          defaultTitle="Frank"
+          titleTemplate="Frank - %s"
           meta={[
             {charset: 'utf-8'},
             {'http-equiv': 'x-ua-compatible', content: 'ie=edge'},
