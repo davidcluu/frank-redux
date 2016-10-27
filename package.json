@@ -12,7 +12,8 @@
     "//Prod Scripts//": "",
     "start": "cross-env NODE_ENV=production node index.js",
 
-    "prep:prod": "git checkout master; git checkout dev .; npm run build:prod:all; find . -maxdepth 1 ! -name '.' ! -name '.git*' ! -name 'dist' ! -name 'LICENSE.md' ! -name 'README.md' ! -name 'index.js' ! -name 'node_modules' ! -name 'package.json' -print0 | xargs -0 rm -rf",
+    "prep:prod": "git checkout heroku; git checkout master .; npm run build:prod:all; find . -maxdepth 1 ! -name '.' ! -name '.git*' ! -name 'dist' ! -name 'LICENSE.md' ! -name 'README.md' ! -name 'index.js' ! -name 'node_modules' ! -name 'package.json' -print0 | xargs -0 rm -rf",
+    "deploy:prod": "git push heroku heroku:master",
     
     "build:prod:all": "rm -rf dist ; npm run build:prod ; npm run build:server",
     "build:prod": "cross-env NODE_ENV=production BABEL_DISABLE_CACHE=1 webpack --config webpack.config.prod.js",
