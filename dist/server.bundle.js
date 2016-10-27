@@ -1344,8 +1344,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(8);
-
 	var _NavButton = __webpack_require__(35);
 
 	var _NavButton2 = _interopRequireDefault(_NavButton);
@@ -1395,13 +1393,6 @@
 	    value: function render() {
 	      var pathname = this.props.pathname;
 
-
-	      var homeLink = '/';
-	      var isHome = pathname === homeLink;
-
-	      var isSubmit = false;
-	      var isSearch = false;
-	      var isHistory = false;
 
 	      return _react2.default.createElement(
 	        'div',
@@ -1674,8 +1665,8 @@
 	  "description": "_1U4MO_-mIyxDF0J-FeN9LP",
 	  "right": "_3TMvA1HDM4AYKp_nlOz5iW",
 	  "upvote": "_2rOIFvr88JVcKtGTiURdI-",
-	  "selected": "_1Wa2JA6ScEZJjh5gnVPS59",
 	  "downvote": "_1LyFBrcIzBGSYO2qdaotbX",
+	  "selected": "_1Wa2JA6ScEZJjh5gnVPS59",
 	  "separator": "_3o8VJ8lEdWjdI65cLI-Y_r",
 	  "links": "_2Zq9XYKgjUI4QXlsWlQgE9",
 	  "viewComments": "eCTnpHe-p6Raj6yzzXLuD",
@@ -1815,31 +1806,25 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: _Post2.default.right },
-	                _react2.default.createElement(
-	                  'div',
-	                  {
-	                    className: _Post2.default.upvote + ' ' + (upvoted && _Post2.default.selected),
-	                    onClick: function onClick() {
-	                      return _this2.onUpvoteClick();
-	                    }
+	                _react2.default.createElement('div', {
+	                  className: _Post2.default.upvote + ' ' + (upvoted && _Post2.default.selected),
+	                  onClick: function onClick() {
+	                    return _this2.onUpvoteClick();
 	                  },
-	                  '\u2227'
-	                ),
+	                  dangerouslySetInnerHTML: { __html: '\n                    <svg viewBox="0 0 93 59" xmlns="http://www.w3.org/2000/svg">\n                      <path d="M80.87 46H93L46.5 0 0 46h12.13L46.5 12l34.37 34z" fill-rule="evenodd"/>\n                    </svg>\n                  ' }
+	                }),
 	                _react2.default.createElement(
 	                  'div',
 	                  null,
 	                  adjustedScore
 	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  {
-	                    className: _Post2.default.downvote + ' ' + (downvoted && _Post2.default.selected),
-	                    onClick: function onClick() {
-	                      return _this2.onDownvoteClick();
-	                    }
+	                _react2.default.createElement('div', {
+	                  className: _Post2.default.downvote + ' ' + (downvoted && _Post2.default.selected),
+	                  onClick: function onClick() {
+	                    return _this2.onDownvoteClick();
 	                  },
-	                  '\u2228'
-	                )
+	                  dangerouslySetInnerHTML: { __html: '\n                    <svg viewBox="0 -12 93 59" xmlns="http://www.w3.org/2000/svg">\n                      <path d="M80.87 0H93L46.5 46 0 0h12.13L46.5 34 80.87 0z" fill-rule="evenodd"/>\n                    </svg>\n                  ' }
+	                })
 	              )
 	            ),
 	            _react2.default.createElement('div', { className: _Post2.default.separator }),
