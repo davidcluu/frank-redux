@@ -87,12 +87,22 @@ export class Post extends Component {
                 <div
                   className={`${styles.upvote} ${(upvoted && styles.selected)}`}
                   onClick={() => this.onUpvoteClick()}
-                >&and;</div>
+                  dangerouslySetInnerHTML={{__html: `
+                    <svg viewBox="0 0 93 59" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M80.87 46H93L46.5 0 0 46h12.13L46.5 12l34.37 34z" fill-rule="evenodd"/>
+                    </svg>
+                  `}}
+                />
                 <div>{adjustedScore}</div>
                 <div
                   className={`${styles.downvote} ${(downvoted && styles.selected)}`}
                   onClick={() => this.onDownvoteClick()}
-                >&or;</div>
+                  dangerouslySetInnerHTML={{__html: `
+                    <svg viewBox="0 -12 93 59" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M80.87 0H93L46.5 46 0 0h12.13L46.5 34 80.87 0z" fill-rule="evenodd"/>
+                    </svg>
+                  `}}
+                />
               </div>
             </div>
             <div className={styles.separator}></div>

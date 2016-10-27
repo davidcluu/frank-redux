@@ -43,15 +43,25 @@
           vertical-align: middle;
           text-align: center;
 
-          .upvote {
-            &.selected {
-              color: #b303c7;
+          .upvote, .downvote {
+            svg {
+              height: 8px;
+
+              path {
+                fill: #d8d8d8;
+              }
             }
           }
 
-          .downvote {
-            &.selected {
-              color: #1b0290;
+          .upvote.selected {
+            svg path {
+              fill: #b303c7;
+            }
+          }
+
+          .downvote.selected {
+            svg path {
+              fill: #1b0290;
             }
           }
         }

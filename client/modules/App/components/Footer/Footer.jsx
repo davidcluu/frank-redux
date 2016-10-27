@@ -1,7 +1,6 @@
 /* eslint max-len: 0 */
 
 import React, {Component} from 'react';
-import {Link} from 'react-router';
 
 import NavButton from './components/NavButton/NavButton';
 
@@ -19,13 +18,6 @@ export class Footer extends Component {
 
   render () {
     const {pathname} = this.props;
-
-    const homeLink = '/';
-    const isHome = pathname === homeLink;
-
-    const isSubmit = false;
-    const isSearch = false;
-    const isHistory = false;
 
     return (
       <div id={styles.footer}>
