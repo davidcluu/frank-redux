@@ -56,9 +56,6 @@
 	// React/Redux Setup
 
 
-	// Webpack
-
-
 	// Other Modules
 
 
@@ -98,25 +95,21 @@
 
 	var _store = __webpack_require__(11);
 
-	var _webpackConfig = __webpack_require__(21);
-
-	var _webpackConfig2 = _interopRequireDefault(_webpackConfig);
-
-	var _config = __webpack_require__(30);
+	var _config = __webpack_require__(21);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _user = __webpack_require__(31);
+	var _user = __webpack_require__(22);
 
 	var _user2 = _interopRequireDefault(_user);
 
-	var _posts = __webpack_require__(35);
+	var _posts = __webpack_require__(26);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _fetchData = __webpack_require__(37);
+	var _fetchData = __webpack_require__(28);
 
-	var _routes = __webpack_require__(39);
+	var _routes = __webpack_require__(30);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
@@ -139,11 +132,12 @@
 	 */
 
 	if (process.env.NODE_ENV === 'development') {
-	  var webpack = __webpack_require__(22);
+	  var webpack = __webpack_require__(40);
+	  var config = __webpack_require__(41);
 	  var webpackDevMiddleware = __webpack_require__(49);
 
-	  var compiler = webpack(_webpackConfig2.default);
-	  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: _webpackConfig2.default.output.publicPath }));
+	  var compiler = webpack(config);
+	  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
 	}
 
 	/* Gzip Compression */
@@ -749,154 +743,6 @@
 
 /***/ },
 /* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
-
-	var path = __webpack_require__(1);
-
-	var webpack = __webpack_require__(22);
-	var ExtractTextPlugin = __webpack_require__(23);
-	var ManifestPlugin = __webpack_require__(24);
-	var ChunkManifestPlugin = __webpack_require__(25);
-	var cssnext = __webpack_require__(26);
-	var postcssFocus = __webpack_require__(27);
-	var postcssReporter = __webpack_require__(28);
-	var cssnano = __webpack_require__(29);
-
-	module.exports = {
-	  entry: {
-	    app: ['./client/index.jsx'],
-	    vendor: ['react', 'react-dom', 'jquery', 'velocity']
-	  },
-
-	  output: {
-	    path: __dirname,
-	    filename: 'app.js',
-	    publicPath: 'http://0.0.0.0:8000/'
-	  },
-
-	  resolve: {
-	    extensions: ['', '.js', '.jsx'],
-	    modules: ['client', 'node_modules'],
-	    alias: {
-	      jquery: path.resolve('client/vendor/jquery'),
-	      velocity: path.resolve('client/vendor/velocity')
-	    }
-	  },
-
-	  module: {
-	    loaders: [{
-	      test: /\.css$/,
-	      exclude: /node_modules/,
-	      loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader'
-	    }, {
-	      test: /\.scss$/,
-	      loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader!sass'
-	    }, {
-	      test: /\.css$/,
-	      include: /node_modules/,
-	      loaders: ['style-loader', 'css-loader']
-	    }, {
-	      test: /\.jsx*$/,
-	      exclude: /node_modules/,
-	      loader: 'babel',
-	      query: {
-	        presets: ['es2015', 'react']
-	      }
-	    }, {
-	      test: /\.(jpe?g|gif|png|svg)$/i,
-	      loader: 'url-loader?limit=10000'
-	    }, {
-	      test: /\.json$/,
-	      loader: 'json-loader'
-	    }]
-	  },
-
-	  plugins: [new webpack.ProvidePlugin({
-	    $: 'jquery',
-	    'window.jQuery': 'jquery'
-	  }), new webpack.DefinePlugin({
-	    'process.env': {
-	      NODE_ENV: JSON.stringify('production')
-	    }
-	  }), new webpack.optimize.CommonsChunkPlugin({
-	    name: 'vendor',
-	    minChunks: Infinity,
-	    filename: 'vendor.js'
-	  }), new ExtractTextPlugin('app.[chunkhash].css', { allChunks: true }), new ManifestPlugin({
-	    basePath: '/'
-	  }), new ChunkManifestPlugin({
-	    filename: 'chunk-manifest.json',
-	    manifestVariable: 'webpackManifest'
-	  }), new webpack.optimize.UglifyJsPlugin({
-	    compressor: {
-	      warnings: false
-	    }
-	  })],
-
-	  postcss: function postcss() {
-	    return [postcssFocus(), cssnext({
-	      browsers: ['last 2 versions', 'IE > 10']
-	    }), cssnano({
-	      autoprefixer: false
-	    }), postcssReporter({
-	      clearMessages: true
-	    })];
-	  }
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, ""))
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = require("webpack");
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	module.exports = require("extract-text-webpack-plugin");
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = require("webpack-manifest-plugin");
-
-/***/ },
-/* 25 */
-/***/ function(module, exports) {
-
-	module.exports = require("chunk-manifest-webpack-plugin");
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	module.exports = require("postcss-cssnext");
-
-/***/ },
-/* 27 */
-/***/ function(module, exports) {
-
-	module.exports = require("postcss-focus");
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	module.exports = require("postcss-reporter");
-
-/***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	module.exports = require("cssnano");
-
-/***/ },
-/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -912,7 +758,7 @@
 	exports.default = config;
 
 /***/ },
-/* 31 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -923,7 +769,7 @@
 
 	var _express = __webpack_require__(2);
 
-	var _user = __webpack_require__(32);
+	var _user = __webpack_require__(23);
 
 	var UserController = _interopRequireWildcard(_user);
 
@@ -936,7 +782,7 @@
 	exports.default = router;
 
 /***/ },
-/* 32 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -946,11 +792,11 @@
 	});
 	exports.login = login;
 
-	var _lodash = __webpack_require__(33);
+	var _lodash = __webpack_require__(24);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _jsonwebtoken = __webpack_require__(34);
+	var _jsonwebtoken = __webpack_require__(25);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
@@ -1005,19 +851,19 @@
 	}
 
 /***/ },
-/* 33 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 34 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = require("jsonwebtoken");
 
 /***/ },
-/* 35 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1028,7 +874,7 @@
 
 	var _express = __webpack_require__(2);
 
-	var _posts = __webpack_require__(36);
+	var _posts = __webpack_require__(27);
 
 	var PostsController = _interopRequireWildcard(_posts);
 
@@ -1043,7 +889,7 @@
 	exports.default = router;
 
 /***/ },
-/* 36 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1054,7 +900,7 @@
 	exports.verifyToken = verifyToken;
 	exports.allPosts = allPosts;
 
-	var _jsonwebtoken = __webpack_require__(34);
+	var _jsonwebtoken = __webpack_require__(25);
 
 	var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
@@ -1096,7 +942,7 @@
 	}
 
 /***/ },
-/* 37 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1106,7 +952,7 @@
 	});
 	exports.fetchComponentData = fetchComponentData;
 
-	var _promiseUtils = __webpack_require__(38);
+	var _promiseUtils = __webpack_require__(29);
 
 	function fetchComponentData(store, components, params) {
 	  var needs = components.reduce(function (prev, current) {
@@ -1119,7 +965,7 @@
 	}
 
 /***/ },
-/* 38 */
+/* 29 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1145,7 +991,7 @@
 	}
 
 /***/ },
-/* 39 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1160,19 +1006,19 @@
 
 	var _reactRouter = __webpack_require__(8);
 
-	var _AppContainer = __webpack_require__(40);
+	var _AppContainer = __webpack_require__(31);
 
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 
-	var _App = __webpack_require__(41);
+	var _App = __webpack_require__(32);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Index = __webpack_require__(45);
+	var _Index = __webpack_require__(36);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
-	var _Login = __webpack_require__(47);
+	var _Login = __webpack_require__(38);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -1190,7 +1036,7 @@
 	);
 
 /***/ },
-/* 40 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1242,8 +1088,8 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_reactHelmet2.default, {
-	          defaultTitle: 'Test',
-	          titleTemplate: '%s - Test',
+	          defaultTitle: 'Frank',
+	          titleTemplate: 'Frank - %s',
 	          meta: [{ charset: 'utf-8' }, { 'http-equiv': 'x-ua-compatible', content: 'ie=edge' }, { name: 'viewport', content: 'width=device-width,height=device-height,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0' }, { name: 'keywords', content: '' }, { name: 'author', content: '' }, { name: 'robots', content: 'index, follow' }, { name: 'revisit-after', content: '1 days' }],
 	          link: [{ rel: 'author', href: 'humans.txt' }]
 	        }),
@@ -1262,7 +1108,7 @@
 	exports.default = AppContainer;
 
 /***/ },
-/* 41 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1283,11 +1129,11 @@
 
 	var _AuthActions = __webpack_require__(18);
 
-	var _Header = __webpack_require__(42);
+	var _Header = __webpack_require__(33);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _Footer = __webpack_require__(43);
+	var _Footer = __webpack_require__(34);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -1390,7 +1236,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ },
-/* 42 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1482,7 +1328,7 @@
 	exports.default = Header;
 
 /***/ },
-/* 43 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1500,7 +1346,7 @@
 
 	var _reactRouter = __webpack_require__(8);
 
-	var _NavButton = __webpack_require__(44);
+	var _NavButton = __webpack_require__(35);
 
 	var _NavButton2 = _interopRequireDefault(_NavButton);
 
@@ -1602,7 +1448,7 @@
 	exports.default = Footer;
 
 /***/ },
-/* 44 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1679,7 +1525,7 @@
 	exports.default = NavButton;
 
 /***/ },
-/* 45 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1699,7 +1545,7 @@
 
 	var _IndexActions = __webpack_require__(20);
 
-	var _Post = __webpack_require__(46);
+	var _Post = __webpack_require__(37);
 
 	var _Index = {
 	  "index": "WqAGihcM094aYCek790sd",
@@ -1798,7 +1644,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Index);
 
 /***/ },
-/* 46 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2028,7 +1874,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Post);
 
 /***/ },
-/* 47 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2050,7 +1896,7 @@
 
 	var _AuthActions = __webpack_require__(18);
 
-	var _LoginForm = __webpack_require__(48);
+	var _LoginForm = __webpack_require__(39);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -2143,7 +1989,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Login);
 
 /***/ },
-/* 48 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2257,6 +2103,154 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)()(LoginForm);
+
+/***/ },
+/* 40 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack");
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
+
+	var path = __webpack_require__(1);
+
+	var webpack = __webpack_require__(40);
+	var ExtractTextPlugin = __webpack_require__(42);
+	var ManifestPlugin = __webpack_require__(43);
+	var ChunkManifestPlugin = __webpack_require__(44);
+	var cssnext = __webpack_require__(45);
+	var postcssFocus = __webpack_require__(46);
+	var postcssReporter = __webpack_require__(47);
+	var cssnano = __webpack_require__(48);
+
+	module.exports = {
+	  entry: {
+	    app: ['./client/index.jsx'],
+	    vendor: ['react', 'react-dom', 'jquery', 'velocity']
+	  },
+
+	  output: {
+	    path: __dirname,
+	    filename: 'app.js',
+	    publicPath: 'http://0.0.0.0:8000/'
+	  },
+
+	  resolve: {
+	    extensions: ['', '.js', '.jsx'],
+	    modules: ['client', 'node_modules'],
+	    alias: {
+	      jquery: path.resolve('client/vendor/jquery'),
+	      velocity: path.resolve('client/vendor/velocity')
+	    }
+	  },
+
+	  module: {
+	    loaders: [{
+	      test: /\.css$/,
+	      exclude: /node_modules/,
+	      loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader'
+	    }, {
+	      test: /\.scss$/,
+	      loader: 'style-loader!css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader!sass'
+	    }, {
+	      test: /\.css$/,
+	      include: /node_modules/,
+	      loaders: ['style-loader', 'css-loader']
+	    }, {
+	      test: /\.jsx*$/,
+	      exclude: /node_modules/,
+	      loader: 'babel',
+	      query: {
+	        presets: ['es2015', 'react']
+	      }
+	    }, {
+	      test: /\.(jpe?g|gif|png|svg)$/i,
+	      loader: 'url-loader?limit=10000'
+	    }, {
+	      test: /\.json$/,
+	      loader: 'json-loader'
+	    }]
+	  },
+
+	  plugins: [new webpack.ProvidePlugin({
+	    $: 'jquery',
+	    'window.jQuery': 'jquery'
+	  }), new webpack.DefinePlugin({
+	    'process.env': {
+	      NODE_ENV: JSON.stringify('production')
+	    }
+	  }), new webpack.optimize.CommonsChunkPlugin({
+	    name: 'vendor',
+	    minChunks: Infinity,
+	    filename: 'vendor.js'
+	  }), new ExtractTextPlugin('app.[chunkhash].css', { allChunks: true }), new ManifestPlugin({
+	    basePath: '/'
+	  }), new ChunkManifestPlugin({
+	    filename: 'chunk-manifest.json',
+	    manifestVariable: 'webpackManifest'
+	  }), new webpack.optimize.UglifyJsPlugin({
+	    compressor: {
+	      warnings: false
+	    }
+	  })],
+
+	  postcss: function postcss() {
+	    return [postcssFocus(), cssnext({
+	      browsers: ['last 2 versions', 'IE > 10']
+	    }), cssnano({
+	      autoprefixer: false
+	    }), postcssReporter({
+	      clearMessages: true
+	    })];
+	  }
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, ""))
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = require("extract-text-webpack-plugin");
+
+/***/ },
+/* 43 */
+/***/ function(module, exports) {
+
+	module.exports = require("webpack-manifest-plugin");
+
+/***/ },
+/* 44 */
+/***/ function(module, exports) {
+
+	module.exports = require("chunk-manifest-webpack-plugin");
+
+/***/ },
+/* 45 */
+/***/ function(module, exports) {
+
+	module.exports = require("postcss-cssnext");
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = require("postcss-focus");
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	module.exports = require("postcss-reporter");
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	module.exports = require("cssnano");
 
 /***/ },
 /* 49 */
