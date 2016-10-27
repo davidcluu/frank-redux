@@ -20,9 +20,7 @@ import {Provider} from 'react-redux';
 import {configureStore} from '../client/store';
 
 // Webpack
-import webpack from 'webpack';
 import config from '../webpack.config.dev';
-import webpackDevMiddleware from 'webpack-dev-middleware';
 
 // Other Modules
 import serverConfig from './config';
@@ -51,6 +49,9 @@ app.set('port', serverConfig.port);
  */
 
 if (process.env.NODE_ENV === 'development') {
+  var webpack = require('webpack');
+  var webpackDevMiddleware = require('webpack-dev-middleware');
+  
   const compiler = webpack(config);
   app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
 }
