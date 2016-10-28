@@ -24,6 +24,7 @@ import {configureStore} from '../client/store';
 // Database
 
 import mongoose from 'mongoose';
+import pg from 'pg';
 
 // Other Modules
 import serverConfig from './config';
@@ -32,6 +33,24 @@ import postsRoutes from './routes/posts.routes';
 import {fetchComponentData} from './util/fetchData';
 import routes from '../client/routes';
 import {printInfo, printError} from './util/print';
+
+
+/**
+ * Load .env in development
+ */
+
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
+
+
+/**
+ * Database
+ */
+
+var pgPool = new pg.Pool(serverConfig.pg);
+pgPool.on('error', (err) => printError('Postgres: Pool connection error - ' + err));
+pgPool.on('connect', () => printInfo('Postgres: Client connected'));
 
 
 /**
@@ -171,44 +190,13 @@ app.use((req, res, next) => {
 
 
 /**
- * Database
+ * Create server and listen
  */
 
-mongoose.connect(serverConfig.mongoURI);
-
-// On Database Connection
-mongoose.connection.on('connected', () => {
-  printInfo('Mongoose: Default connection open to ' + serverConfig.mongoURI);
-
-  // Create server and listen
-  app.listen(serverConfig.port, (error) => {
-    if (error) {
-      printError('Express: frank-redux server error - ' + err);
-    } else {
-      printInfo('Express: frank-redux server listening on port ' + app.get('port'));
-    }
-  });
-});
-
-// On Database Connection Error
-mongoose.connection.on('error', (err) => printError('Mongoose: Default connection error - ' + err));
-
-// On Database Connection Disconnect
-mongoose.connection.on('disconnected', () => printInfo('Mongoose: Default connection disconnected'));
-
-// On Process End
-process.on('SIGINT', () => {
-  printInfo('Mongoose: SIGINT detected, closing default connection');
-
-  mongoose.connection.close(() => {
-    process.exit(0);
-  })
-});
-
-process.on('SIGTERM', () => {
-  printInfo('Mongoose: SIGTERM detected, closing default connection');
-
-  mongoose.connection.close(() => {
-    process.exit(0);
-  })
+app.listen(serverConfig.port, (error) => {
+  if (error) {
+    printError('Express: frank-redux server error - ' + err);
+  } else {
+    printInfo('Express: frank-redux server listening on port ' + app.get('port'));
+  }
 });

@@ -43,7 +43,7 @@
     "serve-static": "*",
     "body-parser": "*",
 
-    "mongoose": "*",
+    "pg": "*",
 
     "react": "*",
     "react-dom": "*",
@@ -62,6 +62,8 @@
   },
   "devDependencies": {
     "nodemon": "*",
+
+    "dotenv": "*",
 
     "webpack": "*",
     "webpack-dev-server": "*",
