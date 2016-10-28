@@ -43,7 +43,9 @@ export function verifyToken(req, res, next) {
       }
     });
   } else {
-    res.status(400);
+    res.status(400).send({
+      error: 'No token'
+    });
   }
 }
 

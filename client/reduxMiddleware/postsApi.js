@@ -16,13 +16,15 @@ function callAPI(endpoint, method) {
   return fetch(BASE_URL + endpoint, config)
     .then(
       response => response.text().then(text => ({text, response}))
-    ).then(({text, response}) => {
+    )
+    .then(({text, response}) => {
       if (!response.ok) {
         return Promise.reject(text);
       }
 
       return text;
-    }).catch(() => {});
+    })
+    .catch(err => Promise.reject(err));
 }
 
 function requestAPI(requestType) {
@@ -52,10 +54,11 @@ export default store => next => action => {
         response: JSON.parse(response),
         type: successType
       }),
-    error =>
+    error => {
       next({
-        error: error.message || 'Error',
+        error: JSON.parse(error).error || 'Error',
         type: errorType
       })
+    }
   );
 };
