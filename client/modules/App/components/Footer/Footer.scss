@@ -15,7 +15,7 @@ $unselected-nav: #727272;
   background-color: #fff;
 
   .button {
-    height: 50%;
+    width: 25%;
 
     display: table-cell;
 
@@ -23,9 +23,17 @@ $unselected-nav: #727272;
     text-align: center;
 
     a {
+      height: 17px;
+
+      display: block;
+
       color: inherit;
       text-decoration: inherit;
       font-weight: inherit;
+
+      svg {
+        height: 17px;
+      }
     }
   }
 
@@ -40,8 +48,22 @@ $unselected-nav: #727272;
   }
 
   .submit {
-    svg path {
-      stroke: $unselected-nav;
+    svg g {
+      fill: none;
+      
+      path {
+        fill: $unselected-nav;
+      }
+
+      ellipse {
+        stroke: #fff;
+        fill: $unselected-nav;
+      }
+
+      circle {
+        stroke: #fff;
+        fill: #fff;
+      }
     }
   }
 
@@ -54,18 +76,7 @@ $unselected-nav: #727272;
 
   .history {
     svg g {
-      .a {
-        stroke: $unselected-nav;
-      }
-
-      .b {
-        stroke: $unselected-nav;
-        fill: $unselected-nav;
-      }
-
-      .c {
-        stroke: $unselected-nav;
-      }
+      fill: $unselected-nav;
     }
   }
 }

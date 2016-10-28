@@ -39,12 +39,8 @@ import routes from '../client/routes';
 
 var db = mongoose.connection;
 mongoose.connect(serverConfig.mongoURL);
-db.on('error', function(){
-  console.error('[!] Database connection Error')
-});
-db.once('open', function(callback) {
-    console.log("[*] Database connected");
-});
+db.on('error', () => console.error('[!] Database connection Error'));
+db.once('open', () => console.log('[*] Database connected'));
 
 
 /**

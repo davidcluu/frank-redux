@@ -27,8 +27,8 @@ export class Footer extends Component {
           currPath={pathname}
           path={'/'}
           svg={`
-            <svg width="18" height="16" viewBox="0 3 18 16" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.923 11.182H18L9 3l-9 8.182h2.077V18h13.846v-6.818zm-9 2.045h4.154V18H6.923v-4.773z" fill-rule="evenodd"/>
+            <svg viewBox="0 0 16 15" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.93 8h.083c1.103 0 1.34-.614.53-1.37L8.744.284c-.416-.388-1.067-.38-1.473 0L.474 6.63C-.346 7.394-.1 8 1.004 8h.08v6.003c0 .545.447.997.997.997h11.856c.55 0 .995-.446.995-.997V8zm-9 2.1h4.155V15H5.93v-4.9z" fill-rule="evenodd"/>
             </svg>
           `}
         />
@@ -38,8 +38,12 @@ export class Footer extends Component {
           currPath={pathname}
           path={'/submit'}
           svg={`
-            <svg width="15" height="15" viewBox="66 3 15 15" xmlns="http://www.w3.org/2000/svg">
-              <path d="M73.17 10.505H68v-.334H73.17V5h.335V10.17h5.171v.335h-5.171v5.171h-.334v-5.171z" stroke-width="3" fill="none" fill-rule="evenodd" stroke-linecap="square"/>
+            <svg viewBox="0 0 16 15" xmlns="http://www.w3.org/2000/svg">
+              <g fill-rule="evenodd">
+                <path d="M4.745 1.176h-2.75C.894 1.176 0 2.07 0 3.172v9.833C0 14.115.893 15 1.994 15h12.012c1.1 0 1.994-.893 1.994-1.995V3.172c0-1.11-.893-1.996-1.994-1.996h-2.75C11.1.5 10.49 0 9.765 0H6.234c-.73 0-1.334.502-1.49 1.176z"/>
+                <ellipse cx="8" cy="8" rx="4" ry="4"/>
+                <circle stroke-width=".5" cx="13.387" cy="3.387" r=".387"/>
+              </g>
             </svg>
           `}
         />
@@ -49,8 +53,8 @@ export class Footer extends Component {
           currPath={pathname}
           path={'/search'}
           svg={`
-            <svg width="24" height="23" viewBox="-1 -1 24 23" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12.93 11.686l.008.008 4.528 3.936.566.492-.995 1.145-.566-.492-4.528-3.936-.084-.075c-2.098 1.618-5.093 1.604-7.147-.18C2.367 10.544 2.138 6.97 4.2 4.6c2.062-2.372 5.634-2.642 7.978-.604 2.25 1.955 2.552 5.325.753 7.69zm-1.373-.69c1.512-1.74 1.343-4.36-.376-5.855-1.718-1.494-4.338-1.295-5.85.444-1.51 1.74-1.343 4.36.376 5.855 1.72 1.493 4.34 1.295 5.85-.444z" stroke-linecap="square" fill-rule="evenodd"/>
+            <svg viewBox="0 0 16 15" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10.334 9.27l.03.026 4.63 4.025.007.007c.31.27.35.754.075 1.07-.277.32-.755.35-1.07.077l-.007-.006-4.63-4.025-.106-.092c-2.094 1.63-5.064 1.64-7.085-.115C-.13 8.23-.326 4.678 1.74 2.302c2.065-2.376 5.61-2.676 7.916-.67 2.213 1.923 2.483 5.27.678 7.637zM8.98 8.594c1.514-1.742 1.37-4.346-.32-5.817-1.693-1.47-4.292-1.25-5.807.492-1.514 1.742-1.37 4.347.32 5.817 1.693 1.47 4.292 1.25 5.807-.492z" stroke-width=".5" fill-rule="evenodd" stroke-linecap="square"/>
             </svg>
           `}
         />
@@ -60,11 +64,10 @@ export class Footer extends Component {
           currPath={pathname}
           path={'/history'}
           svg={`
-            <svg width="22" height="22" viewBox="195 -1 22 22" xmlns="http://www.w3.org/2000/svg">
-              <g fill="none" fill-rule="evenodd">
-                <path class="${styles.a}" d="M199.622 12.974c1.643 3.522 5.83 5.046 9.352 3.404 3.522-1.643 5.046-5.83 3.404-9.352-1.643-3.522-5.83-5.046-9.352-3.404-1.057.493-1.934 1.215-2.6 2.08" stroke-width="2"/>
-                <path class="${styles.b}" d="M199.03 8.278l-.898-3.834 4.578 2.435z"/>
-                <path class="${styles.c}" d="M205.5 8.5v2M205.5 11h2" stroke-width="2" stroke-linecap="square"/>
+            <svg viewBox="0 0 13 15" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#727272" fill-rule="evenodd">
+                <ellipse cx="6.5" cy="3.75" rx="3.9" ry="3.75"/>
+                <path d="M13 15c0-3.452-2.91-6.25-6.5-6.25S0 11.548 0 15h13z"/>
               </g>
             </svg>
           `}
