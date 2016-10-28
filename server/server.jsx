@@ -31,16 +31,7 @@ import userRoutes from './routes/user.routes';
 import postsRoutes from './routes/posts.routes';
 import {fetchComponentData} from './util/fetchData';
 import routes from '../client/routes';
-
-
-/**
- * Database
- */
-
-var db = mongoose.connection;
-mongoose.connect(serverConfig.mongoURL);
-db.on('error', () => console.error('[!] Database connection Error'));
-db.once('open', () => console.log('[*] Database connected'));
+import {printInfo, printError} from './util/print';
 
 
 /**
@@ -70,10 +61,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
 }
 
-/* Gzip Compression */
+// Gzip Compression
 app.use(compression());
 
-/* Handle POST Requests/URL Encoding */
+// Handle POST Requests/URL Encoding
 app.use(bodyParser.json({
   limit: '20mb'
 }));
@@ -82,7 +73,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-/* Serve Static Public Content */
+// Serve Static Public Content
 app.use(serveStatic(path.join(__dirname, '../dist')));
 
 
@@ -95,7 +86,7 @@ app.use('/api/posts', postsRoutes);
 
 
 /**
- * View Pages Route Handlers
+ * React Renderer/Route Handler
  */
 
 const renderFullPage = (html, initialState) => {
@@ -180,11 +171,44 @@ app.use((req, res, next) => {
 
 
 /**
- * Create Server and Listen
+ * Database
  */
 
-app.listen(serverConfig.port, (error) => {
-  if (!error) {
-    console.log('[*] frank-redux server listening on port ' + app.get('port'));
-  }
+mongoose.connect(serverConfig.mongoURI);
+
+// On Database Connection
+mongoose.connection.on('connected', () => {
+  printInfo('Mongoose: Default connection open to ' + serverConfig.mongoURI);
+
+  // Create server and listen
+  app.listen(serverConfig.port, (error) => {
+    if (error) {
+      printError('Express: frank-redux server error - ' + err);
+    } else {
+      printInfo('Express: frank-redux server listening on port ' + app.get('port'));
+    }
+  });
+});
+
+// On Database Connection Error
+mongoose.connection.on('error', (err) => printError('Mongoose: Default connection error - ' + err));
+
+// On Database Connection Disconnect
+mongoose.connection.on('disconnected', () => printInfo('Mongoose: Default connection disconnected'));
+
+// On Process End
+process.on('SIGINT', () => {
+  printInfo('Mongoose: SIGINT detected, closing default connection');
+
+  mongoose.connection.close(() => {
+    process.exit(0);
+  })
+});
+
+process.on('SIGTERM', () => {
+  printInfo('Mongoose: SIGTERM detected, closing default connection');
+
+  mongoose.connection.close(() => {
+    process.exit(0);
+  })
 });

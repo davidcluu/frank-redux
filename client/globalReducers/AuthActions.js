@@ -1,13 +1,19 @@
 import {push} from 'react-router-redux';
 
+import jwtDecode from 'jwt-decode';
+
 /* Init */
 
 export const INIT_AUTH = 'INIT_AUTH';
 
 function checkToken() {
+  var token = localStorage.getItem('id_token');
   var isAuthenticated;
-  if (localStorage.getItem('id_token')) {
-    isAuthenticated = true;
+  if (token) {
+    var {exp} = jwtDecode(token);
+    var now = new Date().getTime() / 1000;
+
+    isAuthenticated = exp > now;
   } else {
     isAuthenticated = false;
   }

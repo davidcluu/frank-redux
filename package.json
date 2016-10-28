@@ -43,8 +43,7 @@
     "serve-static": "*",
     "body-parser": "*",
 
-    "lodash": "*",
-    "jsonwebtoken": "*",
+    "mongoose": "*",
 
     "react": "*",
     "react-dom": "*",
@@ -56,7 +55,10 @@
     "redux": "*",
     "redux-thunk": "*",
 
-    "mongoose": "*"
+    "lodash": "*",
+
+    "jsonwebtoken": "*",
+    "jwt-decode": "*"
   },
   "devDependencies": {
     "nodemon": "*",
