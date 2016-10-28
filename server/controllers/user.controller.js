@@ -18,7 +18,7 @@ function getUserScheme(req) {
 }
 
 function createToken(user) {
-  return jwt.sign(_.omit(user, 'password'), 'testSecret', {
+  return jwt.sign(_.omit(user, 'password'), process.env.JWTSECRET, {
     expiresIn: 60 * 60 * 5
   });
 }
