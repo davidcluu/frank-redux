@@ -3,7 +3,7 @@ import {INIT_AUTH, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS} 
 var isAuthenticated;
 if (typeof localStorage === 'undefined') {
   isAuthenticated = false;
-} else if (localStorage.getItem('id_token')) {
+} else if (localStorage.getItem('frank_token')) {
   isAuthenticated = true;
 } else {
   isAuthenticated = false;

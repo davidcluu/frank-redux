@@ -1,7 +1,7 @@
 const BASE_URL = '/api/posts/';
 
 function callAPI(endpoint, method) {
-  let token = localStorage.getItem('id_token') || null;
+  let token = localStorage.getItem('frank_token') || null;
   let config = {};
 
   if (token) {

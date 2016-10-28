@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode';
 export const INIT_AUTH = 'INIT_AUTH';
 
 function checkToken() {
-  var token = localStorage.getItem('id_token');
+  var token = localStorage.getItem('frank_token');
   var isAuthenticated;
   if (token) {
     var {exp} = jwtDecode(token);
@@ -84,7 +84,7 @@ export function loginUser(creds) {
           dispatch(loginError(user.error));
         } else {
           if (typeof localStorage !== 'undefined') {
-            localStorage.setItem('id_token', user.id_token);
+            localStorage.setItem('frank_token', user.id_token);
           }
           dispatch(receiveLogin(user));
           dispatch(push('/'));
@@ -119,7 +119,7 @@ export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout());
     if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem('id_token');
+      localStorage.removeItem('frank_token');
     }
     dispatch(receiveLogout());
     dispatch(push('/login'));
