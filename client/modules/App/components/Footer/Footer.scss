@@ -1,21 +1,28 @@
 @import '../../../../globalStyles/variables';
 
-$selected-nav: #83009e;
-$unselected-nav: #727272;
+$background-color: #fff;
+$border-color: #eee;
+
+$button-count: 4;
+$button-height: 17px;
+$button-primary-selected: #83009e;
+$button-primary-unselected: #727272;
+$button-secondary: #fff;
 
 #footer {
-  border-top: 1px solid #eee;
-  width: 100%;
+  border-top: 1px solid $border-color;
+  padding: 0 7.5%;
+  width: 85%;
   height: $footer-height;
 
   display: table;
 
   position: fixed;
   bottom: 0;
-  background-color: #fff;
+  background-color: $background-color;
 
   .button {
-    width: 25%;
+    width: (100 / $button-count) * 1%;
 
     display: table-cell;
 
@@ -23,7 +30,7 @@ $unselected-nav: #727272;
     text-align: center;
 
     a {
-      height: 17px;
+      height: $button-height;
 
       display: block;
 
@@ -32,18 +39,18 @@ $unselected-nav: #727272;
       font-weight: inherit;
 
       svg {
-        height: 17px;
+        height: $button-height;
       }
     }
   }
 
   .home {
     svg path {
-      fill: $unselected-nav;
+      fill: $button-primary-unselected;
     }
 
     &.selected svg path {
-      fill: $selected-nav;
+      fill: $button-primary-selected;
     }
   }
 
@@ -52,31 +59,31 @@ $unselected-nav: #727272;
       fill: none;
       
       path {
-        fill: $unselected-nav;
+        fill: $button-primary-unselected;
       }
 
       ellipse {
-        stroke: #fff;
-        fill: $unselected-nav;
+        stroke: $button-secondary;
+        fill: $button-primary-unselected;
       }
 
       circle {
-        stroke: #fff;
-        fill: #fff;
+        stroke: $button-secondary;
+        fill: $button-secondary;
       }
     }
   }
 
   .search {
     svg path {
-      stroke: $unselected-nav;
-      fill: $unselected-nav;
+      stroke: $button-primary-unselected;
+      fill: $button-primary-unselected;
     }
   }
 
   .history {
     svg g {
-      fill: $unselected-nav;
+      fill: $button-primary-unselected;
     }
   }
 }

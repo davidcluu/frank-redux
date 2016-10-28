@@ -31,9 +31,14 @@
     padding-right: 5%;
 
     text-align: right;
+    font-size: 0;
 
     .button {
       display: inline-block;
+
+      svg {
+        height: 20px;
+      }
     }
   }
 }
