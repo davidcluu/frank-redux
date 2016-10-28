@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "//Dev Scripts//": "",
-    "start:dev": "cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 nodemon index.js",
+    "start:dev": "mongod --dbpath dbpath --logpath log/mongod.log & cross-env NODE_ENV=development BABEL_DISABLE_CACHE=1 nodemon index.js",
     
     "lint": "eslint --ext .js --ext .jsx client server",
 
@@ -54,7 +54,9 @@
     "react-helmet": "*",
 
     "redux": "*",
-    "redux-thunk": "*"
+    "redux-thunk": "*",
+
+    "mongoose": "*"
   },
   "devDependencies": {
     "nodemon": "*",

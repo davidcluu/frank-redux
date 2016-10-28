@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 /**
  * Dependencies
  */
@@ -19,12 +21,30 @@ import Helmet from 'react-helmet';
 import {Provider} from 'react-redux';
 import {configureStore} from '../client/store';
 
+// Database
+
+import mongoose from 'mongoose';
+
 // Other Modules
 import serverConfig from './config';
 import userRoutes from './routes/user.routes';
 import postsRoutes from './routes/posts.routes';
 import {fetchComponentData} from './util/fetchData';
 import routes from '../client/routes';
+
+
+/**
+ * Database
+ */
+
+var db = mongoose.connection;
+mongoose.connect(serverConfig.mongoURL);
+db.on('error', function(){
+  console.error('[!] Database connection Error')
+});
+db.once('open', function(callback) {
+    console.log("[*] Database connected");
+});
 
 
 /**
@@ -167,10 +187,8 @@ app.use((req, res, next) => {
  * Create Server and Listen
  */
 
-/* eslint-disable no-console */
-
 app.listen(serverConfig.port, (error) => {
   if (!error) {
-    console.log('frank-redux server listening on port ' + app.get('port'));
+    console.log('[*] frank-redux server listening on port ' + app.get('port'));
   }
 });
