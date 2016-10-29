@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
  */
 
 var pgPool = new pg.Pool(serverConfig.pg);
-pgPool.on('error', (err) => printError('Postgres: Pool connection error - ' + err));
+pgPool.on('error', (err) => printError(`Postgres: Pool connection error - ${err}`));
 pgPool.on('connect', () => printInfo('Postgres: Client connected'));
 
 
@@ -162,29 +162,33 @@ app.use((req, res, next) => {
   match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
     if (error) {
       return res.status(500).send(error.message);
-    } else if (redirectLocation) {
-      return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (renderProps) {
-      const store = configureStore();
-
-      return fetchComponentData(store, renderProps.components, renderProps.params)
-        .then(() => {
-          const initialView = renderToString(
-            <Provider store={store}>
-              <RouterContext {...renderProps} />
-            </Provider>
-          );
-          const finalState = store.getState();
-
-          res
-            .set('Content-Type', 'text/html')
-            .status(200)
-            .end(renderFullPage(initialView, finalState));
-        })
-        .catch(err => next(err));
     }
 
-    return res.status(404).send('Not Found');
+    if (redirectLocation) {
+      return res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    }
+
+    if (!renderProps) {
+      return res.status(404).send('Not Found');
+    }
+
+    const store = configureStore();
+
+    return fetchComponentData(store, renderProps.components, renderProps.params)
+      .then(() => {
+        const initialView = renderToString(
+          <Provider store={store}>
+            <RouterContext {...renderProps} />
+          </Provider>
+        );
+        const finalState = store.getState();
+
+        res
+          .set('Content-Type', 'text/html')
+          .status(200)
+          .end(renderFullPage(initialView, finalState));
+      })
+      .catch(err => next(err));
   });
 });
 
@@ -195,8 +199,8 @@ app.use((req, res, next) => {
 
 app.listen(serverConfig.port, (error) => {
   if (error) {
-    printError('Express: frank-redux server error - ' + err);
+    printError(`Express: frank-redux server error - ${err}`);
   } else {
-    printInfo('Express: frank-redux server listening on port ' + app.get('port'));
+    printInfo(`Express: frank-redux server listening on port ${app.get('port')}`);
   }
 });
