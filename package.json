@@ -57,6 +57,7 @@
 
     "lodash": "*",
 
+    "sodium": "*",
     "jsonwebtoken": "*",
     "jwt-decode": "*"
   },
