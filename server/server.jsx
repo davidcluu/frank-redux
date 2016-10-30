@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 /**
  * Dependencies
  */
@@ -23,7 +21,6 @@ import {configureStore} from '../client/store';
 
 // Database
 
-import mongoose from 'mongoose';
 import pg from 'pg';
 
 // Other Modules
@@ -197,8 +194,8 @@ app.use((req, res, next) => {
  * Create server and listen
  */
 
-app.listen(serverConfig.port, (error) => {
-  if (error) {
+app.listen(serverConfig.port, (err) => {
+  if (err) {
     printError(`Express: frank-redux server error - ${err}`);
   } else {
     printInfo(`Express: frank-redux server listening on port ${app.get('port')}`);

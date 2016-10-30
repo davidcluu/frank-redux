@@ -54,11 +54,10 @@ export default store => next => action => {
         response: JSON.parse(response),
         type: successType
       }),
-    error => {
+    error =>
       next({
         error: JSON.parse(error).error || 'Error',
         type: errorType
       })
-    }
   );
 };

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import React, {Component} from 'react';
 
 import styles from './Header.scss';
